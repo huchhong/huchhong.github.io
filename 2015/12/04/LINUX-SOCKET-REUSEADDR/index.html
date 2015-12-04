@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LINUX SOCKET REUSEADDR | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="unix 网络编程里有提到REUSEADDR和REUSEPORT选项，但是在linux上这个选项的处理还是不一样的，所以做了一些实验，总结了一些经验。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINUX SOCKET REUSEADDR">
+<meta property="og:url" content="http://huchhong.github.io/2015/12/04/LINUX-SOCKET-REUSEADDR/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="unix 网络编程里有提到REUSEADDR和REUSEPORT选项，但是在linux上这个选项的处理还是不一样的，所以做了一些实验，总结了一些经验。">
+<meta property="og:updated_time" content="2015-12-04T11:10:17.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LINUX SOCKET REUSEADDR">
+<meta name="twitter:description" content="unix 网络编程里有提到REUSEADDR和REUSEPORT选项，但是在linux上这个选项的处理还是不一样的，所以做了一些实验，总结了一些经验。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-LINUX-SOCKET-REUSEADDR" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/04/LINUX-SOCKET-REUSEADDR/" class="article-date">
+  	<time datetime="2015-12-04T09:03:47.000Z" itemprop="datePublished">2015-12-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LINUX SOCKET REUSEADDR
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/linux/">linux</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>unix 网络编程里有提到REUSEADDR和REUSEPORT选项，但是在linux上这个选项的处理还是不一样的，所以做了一些实验，总结了一些经验。</p>
+<a id="more"></a>
+<p>首先，要推荐阅读stackoverflow上的一个提问<a href="http://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t" target="_blank" rel="external">Socket options SO_REUSEADDR and SO_REUSEPORT, how do they differ? Do they mean the same across all major operating systems?</a></p>
+<p>这个问题解释了REUSEADDR和REUSEPORT的区别，所以下面只实验REUSEADDR，并且实验只针对tcp。</p>
+<p>然后做了一下实验，实验的小代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;glib.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> *ip;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> port;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> do_listen = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> reuseaddr = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">err_report</span><span class="params">(<span class="keyword">char</span> *fmt, ...)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    va_list ap;</span><br><span class="line"> </span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line">    <span class="built_in">vprintf</span>(fmt, ap);</span><br><span class="line">    va_end(ap);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">abort</span>();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parse_arg</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> opt;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span> ((opt = getopt(argc, argv, <span class="string">"a:p:lr"</span>)) != -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span>(opt) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'a'</span> :</span><br><span class="line">            ip = g_strdup(optarg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'p'</span> :</span><br><span class="line">            port = atoi(optarg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'l'</span> :</span><br><span class="line">            do_listen = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">'r'</span> :</span><br><span class="line">            reuseaddr = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"error option,exit\n"</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (port == <span class="number">0</span>) &#123;</span><br><span class="line">        err_report(<span class="string">"need to specify a port\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">struct</span> sockaddr_in addr;</span><br><span class="line">    <span class="keyword">int</span> sockfd;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"> </span><br><span class="line">    parse_arg(argc, argv);</span><br><span class="line"> </span><br><span class="line">    sockfd = socket(AF_INET, SOCK_STREAM,<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (sockfd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        err_report(<span class="string">"socket %s\n"</span>,strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">memset</span>(&amp;addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    addr.sin_family = AF_INET;</span><br><span class="line">    addr.sin_port = htons(port);</span><br><span class="line">    <span class="keyword">if</span> (ip == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        addr.sin_addr.s_addr = inet_addr(ip);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"set socket addr: %s\n"</span>,ip);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (reuseaddr) &#123;</span><br><span class="line">        ret = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &amp;reuseaddr, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">        <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            err_report(<span class="string">"setsockopt %s\n"</span>,strerror(errno));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"set socket REUSEADDR\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    ret = bind(sockfd, (<span class="keyword">struct</span> sockaddr*)&amp;addr, <span class="keyword">sizeof</span>(addr));</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        err_report(<span class="string">"bind %s\n"</span>,strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (do_listen) &#123;</span><br><span class="line">        ret = listen(sockfd, <span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            err_report(<span class="string">"listen %s\n"</span>,strerror(errno));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"set listen socket\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    close(sockfd);</span><br><span class="line">    g_free(ip);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译出test。</p>
+<p>实验：<br>先运行 ./test -p 8888<br>后运行 ./test -p 8888<br>结果： 失败</p>
+<p>先运行 ./test -p 8888<br>后运行 ./test -p 8888 -r<br>结果： 失败</p>
+<p>先运行 ./test -p 8888 -r<br>后运行 ./test -p 8888 -r<br>结果： 成功</p>
+<p>先运行 ./test -p 8888 -r<br>后运行 ./test -p 8888 -a 127.0.0.1<br>结果： 失败<br>先运行 ./test -p 8888 -r<br>后运行 ./test -p 8888 -a 127.0.0.1 -r<br>结果： 成功</p>
+<p>先运行 ./test -p 8888 -a 192.168.10.104<br>后运行 ./test -p 8888 -a 127.0.0.1<br>结果： 成功<br>绑定具体的不同ip可以成功</p>
+<p>先运行 ./test -p 8888 -r -l<br>后运行 ./test -p 8888 -r<br>结果： 失败</p>
+<font color="red">说明之前有程序用通配符监听相同端口，后续的绑定就会失败</font>
+
+<p>先运行 ./test -p 8888 -r -l<br>后运行 ./test -p 8888 -a 127.0.0.1 -r<br>结果： 失败</p>
+<font color="red">即使后续执行了特定ip，绑定还是失败</font>
+
+<p>先运行 ./test -p 8888 -r -l<br>后运行 ./test -p 8888 -a 127.0.0.1 -r -l<br>结果： 失败</p>
+<font color="red">后续执行了特定ip的监听，绑定还是失败</font>
+
+<p>先运行 ./test -p 8888 -r -l -a 127.0.0.1<br>后运行 ./test -p 8888 -r<br>结果： 失败</p>
+<font color="red">之前绑定特定ip进行监听，后续绑定通配地址还是失败</font>
+
+<p>先运行 ./test -p 8888 -r -l -a 127.0.0.1<br>后运行 ./test -p 8888 -r -l<br>结果： 失败</p>
+<font color="red">之前绑定特定ip进行监听，后续绑定通配地址监听还是失败</font>
+
+<p>先运行 ./test -p 8888 -r -l -a 127.0.0.1<br>后运行 ./test -p 8888 -a 192.168.10.104<br>结果： 成功</p>
+<font color="red">只要绑定具体ip，没有问题</font>
+
+<p>先运行 ./test -p 8888 -r -l -a 127.0.0.1<br>后运行 ./test -p 8888 -a 192.168.10.104 -l<br>结果： 成功</p>
+<font color="red">只要绑定具体ip，没有问题</font>
+
+<p>先运行 ./test -p 8888 -r -l -a 127.0.0.1<br>后运行 ./test -p 8888 -a 192.168.10.104 -l -r<br>结果： 成功</p>
+<font color="red">只要绑定具体ip，没有问题</font>
+
+<p>以上说明了：</p>
+<ul>
+<li>只要绑定具体的不同的ip，不需要设置SO_REUSEADDR</li>
+<li>通配地址和特定地址是存在冲突的，只要存在通配地址，就必须所有的socket设置SO_REUSEADDR</li>
+<li>如果之前绑定了地址用于监听，那么想要重用端口，所有socket必须绑定具体ip，通配ip不行。</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/12/04/LEVELDB-ATOMICPOINTER/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          LEVELDB ATOMICPOINTER
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
