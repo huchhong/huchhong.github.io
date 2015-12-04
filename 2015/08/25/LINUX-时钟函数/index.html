@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LINUX 时钟函数 | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINUX 时钟函数">
+<meta property="og:url" content="http://huchhong.github.io/2015/08/25/LINUX-时钟函数/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。">
+<meta property="og:updated_time" content="2015-12-04T14:24:39.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LINUX 时钟函数">
+<meta name="twitter:description" content="linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/C-C-qemu/" style="font-size: 10px;">C/C++ qemu</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-LINUX-时钟函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/25/LINUX-时钟函数/" class="article-date">
+  	<time datetime="2015-08-24T16:00:00.000Z" itemprop="datePublished">2015-08-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LINUX 时钟函数
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。</p>
+<a id="more"></a>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> int64_t <span class="title">get_clock</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;      </span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifdef</span> CLOCK_MONOTONIC</span></span><br><span class="line">    <span class="keyword">if</span> (use_rt_clock) &#123;</span><br><span class="line">        <span class="keyword">struct</span> timespec ts;</span><br><span class="line">        clock_gettime(CLOCK_MONOTONIC, &amp;ts);</span><br><span class="line">        <span class="keyword">return</span> ts.tv_sec * <span class="number">1000000000L</span>L + ts.tv_nsec;</span><br><span class="line">    &#125; <span class="keyword">else</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span>     </span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* <span class="doctag">XXX:</span> using gettimeofday leads to problems if the date</span><br><span class="line">           changes, so it should be avoided. */</span></span><br><span class="line">        <span class="keyword">return</span> get_clock_realtime();</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;      </span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>查了一下，明白了gettimeofday的问题。可以从 man gettimeofday里得到解释：</p>
+<blockquote>
+<p>The time returned by gettimeofday() is affected by discontinuous jumps in the system time (e.g., if the system administrator  manually  changes  the system time).  If you need a monotonically increasing clock, see clock_gettime(2).</p>
+</blockquote>
+<p>因此问题在于如果运行qemu的主机被人为的修改了系统时间或者主机上有NTP服务，都将影响到 gettimeofday 返回的时间。</p>
+<p>再查看clock_gettime的手册，可以发现即使是CLOCK_MONOTONIC也会收到ntp和adjtime的影响。但它不会受到系统时间的非连续跳动的影响，也就是像系统管理员手动修改系统时间这样的情况。那么ntp和adjtime是如何影响clock_gettime呢？它是通过修改时钟的速率来完成的，也就是每1秒的时间被拉长或缩短，以此来追上修改的时间。这样从clock_gettime的返回值来看，时间依然是连续的。</p>
+<p>还有一种时钟类型CLOCK_MONOTONIC_RAW，它是linux独有的，基于硬件的时钟，不会收到ntp和adjtime的影响，显然这种时钟对于需要相对计时的程序来说非常理想。</p>
+<h3 id="suspend的影响">suspend的影响</h3><p>一个比较有趣的事情是如果系统suspend 或者 hibernage了，会对时钟有什么影响呢？suspend的情况下所有进程都暂停了，当它恢复的时候，MONOTONIC时钟返回的值会继续延续suspend之前的值，而REALTIME这样的时钟返回的由于是墙上时间，因此从返回值可以明显看出有了一个跳跃。由于程序在suspend期间被暂停了，因此MONOTONIC时钟的这种表现会让程序显得没有被中断过。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          GCC THREAD LOCAL STORAGE
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">QEMU 里PTHREAD_KEY_T 的使用</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/12 | Hong&#39;s blog</title>
+  <title>VDI下CPU性能与桌面版CPU性能的差异 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hong's blog">
-<meta property="og:url" content="http://huchhong.github.io/archives/2015/12/index.html">
+  <meta name="description" content="偶然搜到一篇文章comparing-the-cpu-performance-of-physical-and-virtual-pcs-vdi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VDI下CPU性能与桌面版CPU性能的差异">
+<meta property="og:url" content="http://huchhong.github.io/2015/07/10/VDI下CPU性能与桌面版CPU性能的差异/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description">
+<meta property="og:description" content="偶然搜到一篇文章comparing-the-cpu-performance-of-physical-and-virtual-pcs-vdi">
+<meta property="og:updated_time" content="2015-12-04T14:40:50.252Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hong's blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="VDI下CPU性能与桌面版CPU性能的差异">
+<meta name="twitter:description" content="偶然搜到一篇文章comparing-the-cpu-performance-of-physical-and-virtual-pcs-vdi">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -165,53 +166,104 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-VDI下CPU性能与桌面版CPU性能的差异" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/12/03/LEVELDB-ATOMICPOINTER/" class="archive-article-date">
-  	<time datetime="2015-12-03T11:53:02.000Z" itemprop="datePublished">12月 3</time>
+    <div class="article-meta">
+      <a href="/2015/07/10/VDI下CPU性能与桌面版CPU性能的差异/" class="article-date">
+  	<time datetime="2015-07-09T16:00:00.000Z" itemprop="datePublished">2015-07-10</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/03/LEVELDB-ATOMICPOINTER/">LEVELDB ATOMICPOINTER</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      VDI下CPU性能与桌面版CPU性能的差异
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发编程/">并发编程</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化/">虚拟化</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>偶然搜到一篇文章<a href="https://helgeklein.com/blog/2013/07/comparing-the-cpu-performance-of-physical-and-virtual-pcs-vdi/" target="_blank" rel="external">comparing-the-cpu-performance-of-physical-and-virtual-pcs-vdi</a></p>
+<a id="more"></a>
+<p>这篇文章里面比较了vdi下cpu的性能和物理机上cpu性能的差异，得到了一些测试结果和结论，一开始让我比较吃惊。让我吃惊的结论是：</p>
+<ul>
+<li>VDI vs old PC: 跑在intel最新的服务器版cpu上的VDI虚机性能并不比5年前的桌面版cpu快很多</li>
+<li>VDI vs new PC：即使一个笔记本cpu也可以在几乎所有测试上完爆Xeon（VDI）。即使在桌面版cpu可以完爆移动版cpu，一个VDI虚机却不能胜过普通PC。</li>
+</ul>
+<p>这个结论应该是没有问题的，前段时间刚好拿到同事测试的VDI虚机的跑分数据和物理机进行了对比，确实VDI虚机被i3物理机完爆了。</p>
+<p>这里面吃惊的地方是服务器版的cpu直觉上应该性能会很好，至少比什么第三代i3要好很多，而虚拟化带来的性能损耗按理说也不会太大，一般虚机的cpu性能会是host上性能的90%以上，那么为什么VDI虚机的cpu性能会如此差劲？</p>
+<p>我想了想，这里面有一个误区存在，那就是认为服务版的cpu每核性能会比普通桌面版PC强。真正的说法应该是每socket的cpu上服务器版cpu会比桌面版强。一般桌面版cpu每个socket也就4核，而服务器上的cpu每个socket多达十几核。cpu性能的计算并不是简单的按核数叠加，也就是说所有其他条件相等下，四核cpu性能并不是双核cpu的两倍。而且核数一多，带来一个坏处，就是限于电源，发热量等原因，cpu的频率上不去，所以同等条件下，单核cpu可以比四核cpu超频更多，性能更好，这对于单线程程序显然是有利的。</p>
+<p>因此从以上方面考虑的话，平分到每个核上，桌面版cpu甚至移动版cpu的性能比服务器版cpu性能好，也不是不可理解的事情。而VDI分配的vcpu核数对应于host上的cpu，性能又有所下降，所以会造成这样的跑分结果。</p>
+<p>再给一个链接：<a href="https://www.cpubenchmark.net/singleThread.html" target="_blank" rel="external">https://www.cpubenchmark.net/singleThread.html</a>。上面链接里列出了不同cpu上单线程跑分的结果，可以看到i3的表现相当不错，和最好的i7拉开的分数也不多。</p>
+<p>可能还有其他方面的原因，但是这个结果确实给VDI提一个醒：不要以为跑在高大上的最新服务器cpu上，就觉得性能理所应当要好。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/20/GLIB-测试框架/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          GLIB 测试框架
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">QEMU MEMORY REGION 使用记录</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
 
 </div>
       <footer id="footer">
@@ -237,8 +289,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

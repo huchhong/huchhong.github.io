@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>QEMU MEMORY REGION 使用记录 | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="起因之前对qemu和kvm里的内存管理做了一些研究，项目里也正好有一个场景需要对虚机的内存做一些手脚，然后写了一些代码，发现了一些问题，在这里小结一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QEMU MEMORY REGION 使用记录">
+<meta property="og:url" content="http://huchhong.github.io/2015/06/26/QEMU-MEMORY-REGION-使用记录/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="起因之前对qemu和kvm里的内存管理做了一些研究，项目里也正好有一个场景需要对虚机的内存做一些手脚，然后写了一些代码，发现了一些问题，在这里小结一下。">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/RTX截图未命名.bmp">
+<meta property="og:updated_time" content="2015-12-04T14:45:32.407Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QEMU MEMORY REGION 使用记录">
+<meta name="twitter:description" content="起因之前对qemu和kvm里的内存管理做了一些研究，项目里也正好有一个场景需要对虚机的内存做一些手脚，然后写了一些代码，发现了一些问题，在这里小结一下。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/C-C-qemu/" style="font-size: 10px;">C/C++ qemu</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-QEMU-MEMORY-REGION-使用记录" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/" class="article-date">
+  	<time datetime="2015-06-25T16:00:00.000Z" itemprop="datePublished">2015-06-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      QEMU MEMORY REGION 使用记录
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="起因">起因</h2><p>之前对qemu和kvm里的内存管理做了一些研究，项目里也正好有一个场景需要对虚机的内存做一些手脚，然后写了一些代码，发现了一些问题，在这里小结一下。</p>
+<a id="more"></a>
+<p>场景大概是这样的：虚机是windows系统，需要对虚机里的一段物理内存做一些只读保护。</p>
+<p>当时想到的方法是在qemu里申请一段memory region来覆盖虚机对应的物理内存，这样虚机对这段物理内存的读写操作就会被qemu捕获到，并作出处理，如果要求只读，那么只需要忽略写请求就可以了。</p>
+<p>事情好像很简单，但是后来发现真是too young too simple，过程是一波三折，等到最后解决了，对虚机的内存管理又有了更深的了解。</p>
+<h2 id="过程">过程</h2><p>一开始是这么干的，新写了一个设备，会接收虚机下发的内存保护的请求，请求里有需要保护的内存的物理地址和大小（这里注意一点，当时保护的内存大小不足1页）。用memory_region_init_io申请了一个内存区域，大小就是要保护的内存段的大小，然后把它覆盖到内存地址空间里需要保护的内存对应的地址，再设计好一个MemoryRegionOps来处理这段区域的读写操作就可以了。这里还有一个要处理的地方，那就是初始化完这段memory region后，要把当时虚机这段物理内存的数据拷贝到新建的memory region里。这些细节做完了以后，开始测试，结果发现虚机运行后一旦发出保护内存的请求，虚机就挂住了（现在想想，我保护的这段内存还是有点特殊的，应该不是每段内存都会这样，也辛亏这样，才促使我进一步探查其中的原因）。</p>
+<p>我很奇怪为什么会这样，因为按我之前的理解，这段区域现在在kvm对应的ept页表项里应该被标记为了mmio，虚机访问这段区域会触发ept页错误，然后kvm判断是mmio，并且自身处理不了，接着就会退回到qemu处理这个io请求。（这个过程其实基本正确，但是其中一个细节被我忽略了，就是这个细节导致了虚机挂起，后面会提到）。</p>
+<p>后来又做了一个尝试，这次不再使用memory_region_init_io，而是使用memory_region_init_ram，并且把这个memory_region设置成了只读，这种方式虽然不如memory_region_init_io灵活，但是简单，而且虚机读取这段区域的时候不用退出guest模式，效率上也比较高。但是还是失败了，注意这里我申请的区域大小还是不足一页。</p>
+<p>qemu的日志里显示的错误是这样的：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/RTX截图未命名.bmp" alt="错误"></p>
+<p>这里提示kvm里内部错误，而且是模拟出错了，看样子是模拟指令出错了。当时对kvm模拟cpu指令部分不了解（现在也还不熟frown），这个错误看得我心慌啊，不知道错误发生在什么地方。所以我选择性地忽略了这里的提示，开始走读qemu和kvm的内存相关代码，检查可能出错的地方（这是我现在渐渐养成的一个习惯，用从上往下的方式梳理代码，找出错误，虽然肯定不是最快的方式，但是这个过程比直接解决问题能掌握更多的细节）。</p>
+<p>后来我发现qemu里向kvm里通知memory region的时候（在kvm_set_phys_mem函数里），有个地方值得注意：通知下来的内存区域大小会被裁剪为页对齐，而且是缩小性的对齐，不足一页的地方不会被通知下去。kvm里对应的也有做检查，而且多做了一项检查。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*qemu代码*/</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">kvm_set_phys_mem</span><span class="params">(MemoryRegionSection *section, <span class="keyword">bool</span> add)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    delta = (TARGET_PAGE_SIZE - (start_addr &amp; ~TARGET_PAGE_MASK));</span><br><span class="line">      delta &amp;= ~TARGET_PAGE_MASK;</span><br><span class="line">      <span class="keyword">if</span> (delta &gt; size) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      start_addr += delta;</span><br><span class="line">      size -= delta;</span><br><span class="line">      size &amp;= TARGET_PAGE_MASK;</span><br><span class="line">      <span class="keyword">if</span> (!size || (start_addr &amp; ~TARGET_PAGE_MASK)) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">     ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*kvm代码*/</span></span><br><span class="line"><span class="keyword">int</span> __kvm_set_memory_region(<span class="keyword">struct</span> kvm *kvm,</span><br><span class="line">                  <span class="keyword">struct</span> kvm_userspace_memory_region *mem)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/* General sanity checks */</span></span><br><span class="line">      <span class="keyword">if</span> (mem-&gt;memory_size &amp; (PAGE_SIZE - <span class="number">1</span>))</span><br><span class="line">          <span class="keyword">goto</span> out;</span><br><span class="line">      <span class="keyword">if</span> (mem-&gt;guest_phys_addr &amp; (PAGE_SIZE - <span class="number">1</span>))</span><br><span class="line">          <span class="keyword">goto</span> out;</span><br><span class="line">      <span class="comment">/* We can read the guest memory with __xxx_user() later on. */</span></span><br><span class="line">      <span class="keyword">if</span> ((mem-&gt;slot &lt; KVM_USER_MEM_SLOTS) &amp;&amp;</span><br><span class="line">          ((mem-&gt;userspace_addr &amp; (PAGE_SIZE - <span class="number">1</span>)) ||</span><br><span class="line">           !access_ok(VERIFY_WRITE,</span><br><span class="line">              (<span class="keyword">void</span> __user *)(<span class="keyword">unsigned</span> <span class="keyword">long</span>)mem-&gt;userspace_addr,</span><br><span class="line">              mem-&gt;memory_size)))</span><br><span class="line">          <span class="keyword">goto</span> out;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>kvm里多出来的检查是userspace_addr的地址也必须是页边界对齐。这个措施保证了hva和gpa都是在页边界上，这样页内偏移自然就能对应起来。至于大小要求是页大小倍数，当然是因为kvm里不管是影子页表还是ept处理的最小单元都是页了。</p>
+<p>这里提到userspace_addr必须是页边界对齐，是因为有一次测试修改的过程中，使用了这样的方法来初始化一个memory region： 先用malloc申请了一段虚拟地址，然后用memory_region_init_ram_ptr初始化，<strong>由于malloc不能保证起始地址是页边界对齐的，因此运行的时候kvm会报参数错误。可以使用mmap映射虚拟地址，这种方式可以保证起始地址是页边界对齐的，memory_region_init_ram内部申请地址实际上也是用了mmap映射匿名内存。</strong></p>
+<p>回头说设置的内存区域大小不是页大小倍数的情况，举个例子，会导致以下的情况发生：你想要设置内存地址是230001c4-230001c8这样4个字节的区域为mmio，原本地址为0x100000-0xc0000000之间的地址标记为了ram（1M到3G，举个简单例子）。当qemu更新了内存地址空间的拓扑后，就要通知到kvm。此时进kvm_set_phys_mem这个函数的会是这几段区域：0x100000-0x230001c4 , 0x230001c4-0x230001c8, 0x230001c8-0xc0000000, 但是经过页边界对齐后，通知到kvm的区域变为了: 0x100000-0x23000000,0x23001000-0xc0000000。对kvm看来，要保护的内存区域所在的那个物理页整个被标记为了mmio。这是合理的，因为之前说了，内存管理的最小粒度为页，事实上也不可能将一页内的某段区域单独设置为mmio。</p>
+<p>了解到这一点后，我意识到之前使用memory_region_init_ram方式的错误，虽然我是想把这段区域标记为只读的ram，但是由于没有对齐的关系，对kvm来说这段区域实际上被标记为了mmio。所以这种情况其实和使用memory_region_init_io是一样的，发生错误的原因应该也是相同的。之后我就把那段地址区域扩张到页对齐后再添加到内存地址空间。这里面还存在一个问题，就是本来只想保护一小段区域，现在将原本不需要保护的区域保护了起来。解决方法也很简单，阅读代码就可以发现，kvm里将只读的ram的写操作交给了qemu处理，到了qemu这里，可以对这个原本为ram的memory region设置一个MemoryRegionOps，就可以处理这种情况。改完以后，测试发现可以正常保护需要的区域。</p>
+<p>但是之前mmio情况下导致虚机挂住的情况实际上还没有得到解释。即使使用memory_region_init_io的使用申请的大小经过了页对齐，也还是同样的错误。</p>
+<p>在kvm里加了日志，追查发现错误的代码路径是这样的：</p>
+<p>kvm_mmu_page_fault    /<em>触发页错误</em>/<br>–&gt; vcpu-&gt;arch.mmu.page_fault    /<em>处理页错误</em>/<br>–&gt; x86_emulate_instruction  /<em>因为是mmio，所以需要模拟指令</em>/<br>–&gt; x86_decode_insn  /<em>先解析出错的那个时候的指令</em>/<br>–&gt; __do_insn_fetch_bytes  /<em>获取指令数据</em>/<br>–&gt; 根据代码段和eip得到逻辑地址，然后翻译为虚拟地址<br>–&gt; kvm_fetch_guest_virt<br>–&gt; 先翻译gva为gpa<br>–&gt; kvm_read_guest_page<br>–&gt; gfn_to_hva_prot  /<em>出错</em>/</p>
+<p>最终出错的地方在于将gfn转换为hva的时候，打印gfn，结果惊讶的发现gfn刚好等于我设置的要保护的内存所在的那一页，之前提到，那一页被kvm标记为了mmio，所以自然gfn没有对应的hva，这种情况下kvm无法得知mmio对应的host上的地址是多少，因为只有qemu才知道这些信息，这也是kvm和qemu在内存处理上互相分工的地方。非常巧的地方是，原本代码段所在的物理内存当然不应该是mmio，所以不可能出现上面的情况，但是由于我在qemu上做了手脚，导致刚好代码段所在的物理页标记为了mmio，导致kvm读取指令数据失败。再想想，使用memory_region_init_ram将那段地址标记为只读的ram可以不出错的原因是即使需要模拟指令，由于这段内存有对应的host ram，因此里面的数据可以被kvm读出，不会出现问题。</p>
+<h2 id="总结">总结</h2><p>对虚机里属于物理内存的一些memory region进行hack还是比较危险的，会出现一些意想不到的问题。总的来说，在内存管理方面，qemu和kvm联系的比较紧密，对qemu的理解深度很大程度上依赖于对kvm的理解。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/07/10/VDI下CPU性能与桌面版CPU性能的差异/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          VDI下CPU性能与桌面版CPU性能的差异
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LIBVIRT HOOK 脚本里执行后台程序</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

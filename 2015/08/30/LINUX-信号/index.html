@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LINUX 信号 | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="查阅好的查阅文档都在linux自带的manual里。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINUX 信号">
+<meta property="og:url" content="http://huchhong.github.io/2015/08/30/LINUX-信号/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="查阅好的查阅文档都在linux自带的manual里。">
+<meta property="og:updated_time" content="2015-12-04T14:10:13.316Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LINUX 信号">
+<meta name="twitter:description" content="查阅好的查阅文档都在linux自带的manual里。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/C-C-qemu/" style="font-size: 10px;">C/C++ qemu</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-LINUX-信号" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/30/LINUX-信号/" class="article-date">
+  	<time datetime="2015-08-29T16:00:00.000Z" itemprop="datePublished">2015-08-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LINUX 信号
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="查阅">查阅</h2><p>好的查阅文档都在linux自带的manual里。</p>
+<a id="more"></a>
+<p>查阅信号数字对应的具体信号：  kill -l</p>
+<p>查阅信号的定义： man 7 signal</p>
+<h2 id="SIGTTIN和SIGTTOUT">SIGTTIN和SIGTTOUT</h2><p>根据手册里提到的，SIGTTIN是后台进程想要从终端读取的时候触发的，SIGTTOU是后台进程想要写完终端的时候触发的。他们的默认动作都是暂停进程。</p>
+<p>但是实际在linux上做测试的时候，可以发现</p>
+<ul>
+<li>后台进程往终端写不会触发SIGTTOU，并且可以顺利的在终端上输出。</li>
+<li>后台进程从终端读会收到SIGTTIN，并且导致程序产生段错误，崩溃。</li>
+</ul>
+<h2 id="信号掩码和信号处理函数的继承">信号掩码和信号处理函数的继承</h2><p>根据手册的记载，信号处理函数的继承有以下规则：</p>
+<ul>
+<li>信号处理函数是进程属性，所以进程里的每个线程的信号处理函数是相同的</li>
+<li>通过fork创建的子进程会继承父进程的信号处理函数</li>
+<li>execve 后设置为处理的信号处理函数会被重置为默认函数，设置为忽略的信号保持不变。意思是如果父进程里信号设置处理为SIG_IGN，那么等到子进程被exec了，这个信号的处理还是被忽略，不会重置为默认函数。</li>
+</ul>
+<p>可以通过以下小程序验证：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">test.c --&gt; test</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*sighandler_t)</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sighandler_t</span> old_int_handler;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sighandler_t</span> old_ter_handler;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">static</span> <span class="keyword">sighandler_t</span> old_handlers[SIGSYS + <span class="number">1</span>];</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sig_handler</span><span class="params">(<span class="keyword">int</span> signo)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"receive signo %d\n"</span>,signo);</span><br><span class="line">    old_handlers[signo](signo);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    old_handlers[SIGINT] = signal(SIGINT, SIG_IGN);</span><br><span class="line">    old_handlers[SIGTERM] = signal(SIGTERM, sig_handler);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line"> </span><br><span class="line">    ret = fork();</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//child</span></span><br><span class="line">        execlp(<span class="string">"/tmp/test2"</span>, <span class="string">"/tmp/test2"</span>,(<span class="keyword">char</span>*)<span class="literal">NULL</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (ret &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//parent</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        perror(<span class="string">""</span>);</span><br><span class="line">        <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">================================================</span><br><span class="line">test2.c --&gt; test2</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>test换成test2后，SIGINT的处理方式还是忽略，SIGTERM被重置为默认的方式。</p>
+<p>信号掩码有以下规则：</p>
+<ul>
+<li>每个线程可以有自己信号掩码</li>
+<li>fork出来的子进程会继承父进程的信号掩码，exec后信号掩码保持不变</li>
+<li>针对进程发送的信号，会被任意的没有屏蔽该信号的线程接收，注意只有一个线程会随机收到。</li>
+<li>fork之后子进程里pending的信号集初始化为空，exec会保持pending信号集</li>
+</ul>
+<p>此处有一个地方需要特别注意，手册里说fork之后子进程继承了父进程的信号掩码，但是如果父进程是多线程程序呢，要知道多线程程序里每个线程都有自己的信号掩码，此时子进程继承了所有线程的信号掩码的集合吗？</p>
+<p>于是我写了下面的小程序验证了一下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*sighandler_t)</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">thread1</span><span class="params">(<span class="keyword">void</span> *arg)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">sigset_t</span> <span class="built_in">set</span>;</span><br><span class="line">     </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"in thread1\n"</span>);</span><br><span class="line"> </span><br><span class="line">    sigemptyset(&amp;<span class="built_in">set</span>);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGTERM);</span><br><span class="line">    pthread_sigmask(SIG_BLOCK, &amp;<span class="built_in">set</span>, <span class="literal">NULL</span>);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sigset_print</span><span class="params">(sigset_t *<span class="built_in">set</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= SIGSYS; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sigismember(<span class="built_in">set</span>, i)) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"signal %d is in set\n"</span>,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="keyword">sigset_t</span> <span class="built_in">set</span>;</span><br><span class="line">    <span class="keyword">pthread_t</span> pid;</span><br><span class="line"> </span><br><span class="line">    pthread_create(&amp;pid, <span class="literal">NULL</span>, thread1, <span class="literal">NULL</span>);</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line"> </span><br><span class="line">    sigemptyset(&amp;<span class="built_in">set</span>);</span><br><span class="line">    sigaddset(&amp;<span class="built_in">set</span>, SIGINT);</span><br><span class="line">    pthread_sigmask(SIG_BLOCK, &amp;<span class="built_in">set</span>, <span class="literal">NULL</span>);</span><br><span class="line"> </span><br><span class="line">    ret = fork();</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//child</span></span><br><span class="line">        pthread_sigmask(SIG_BLOCK, <span class="literal">NULL</span>, &amp;<span class="built_in">set</span>);</span><br><span class="line">        sigset_print(&amp;<span class="built_in">set</span>);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (ret &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//parent</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        perror(<span class="string">""</span>);</span><br><span class="line">        <span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>结果证明，只有在主线程里设置的掩码才被子进程继承了。这里面的原因在于linux里的fork只是复制了调用它的那个线程，因此在子进程里只有父进程的主线程被拷贝了，当然信号掩码就是父进程的主线程的信号掩码的复制了。再次验证证明，如果是在thread1里调用fork，那么子进程的信号掩码就会是thread1的拷贝了。</strong></p>
+<p>最后不得不感慨一下，fork和exec之后信号掩码，信号处理函数，当前信号屏蔽集这些的变化实在是不好记忆，过一段时间就混乱了。。。</p>
+<h2 id="多线程下的信号处理">多线程下的信号处理</h2><p>多线程的时候处理信号，推荐的做法应该是大部分线程屏蔽需要处理的信号，然后专门留下一个线程使用sigwait这样的函数等待信号的发生并处理信号。这样将信号的处理从异步变为同步，去除了原本异步时候可重入函数的问题。</p>
+<p>范例可以参看  man  pthread_sigmask里提供的例子。</p>
+<h2 id="实时信号">实时信号</h2><p>实时信号相对于标准信号，哪些是标准信号，从kill -l 里看到的SIGRTMIN之前的信号都是标准信号，标准信号都被定义好了，每个信号代表特殊用途，但是实时信号的用途是应用程序决定的，没有被事先规定好哪个信号应该用于什么目的。</p>
+<p>实时信号有几个优势：</p>
+<ul>
+<li>多个相同的实时信号可以排队，相对于标准信号，如果有多个SIGINT被pending，等到取消阻塞，那么只有一个SIGINT会被发送。</li>
+<li>实时信号可以按序发送，多个相同的实时信号会按他们发送的顺序被处理，如果有多个不同号码的实时信号，那么最低号码的实时信号会先处理。相比之下，标准信号并没有规定信号处理的顺序。</li>
+</ul>
+<p>没有见过实时信号的应用，不知道实时信号在什么情境下适合使用？</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/03/QEMU-设备模拟的前提/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          QEMU 设备模拟的前提
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/26/QEMU-里的队列/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">QEMU 里的队列</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

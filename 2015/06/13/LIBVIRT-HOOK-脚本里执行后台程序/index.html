@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LIBVIRT HOOK 脚本里执行后台程序 | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="libvirt 支持在虚机启动和关闭的时候执行hook脚本，具体可以看官方介绍Hooks for specific system management。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LIBVIRT HOOK 脚本里执行后台程序">
+<meta property="og:url" content="http://huchhong.github.io/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="libvirt 支持在虚机启动和关闭的时候执行hook脚本，具体可以看官方介绍Hooks for specific system management。">
+<meta property="og:updated_time" content="2015-12-04T13:56:46.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LIBVIRT HOOK 脚本里执行后台程序">
+<meta name="twitter:description" content="libvirt 支持在虚机启动和关闭的时候执行hook脚本，具体可以看官方介绍Hooks for specific system management。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/C-C-qemu/" style="font-size: 10px;">C/C++ qemu</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-LIBVIRT-HOOK-脚本里执行后台程序" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/" class="article-date">
+  	<time datetime="2015-06-12T16:00:00.000Z" itemprop="datePublished">2015-06-13</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LIBVIRT HOOK 脚本里执行后台程序
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libvirt/">libvirt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化/">虚拟化</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>libvirt 支持在虚机启动和关闭的时候执行hook脚本，具体可以看官方介绍<a href="https://www.libvirt.org/hooks.html" target="_blank" rel="external">Hooks for specific system management</a>。</p>
+<a id="more"></a>
+<p>还是简单介绍一下，比如用libvirt管理qemu，那么需要在/etc/libvirt/hooks目录下创建一个脚本文件qemu，如果这个目录不存在，自己创建这个目录就可以了。记得将qemu脚本加上可执行权限，不然等着出错吧（出错了赶紧看一下libvirtd.log）。</p>
+<p>这个脚本可以是任何脚本，shell啦，perl啦，python啦，ruby啦，挑一个你觉得顺手的就行了。libvirtd 会在几个不同的时机调用qemu脚本，并附加一定格式的参数。这一些看官方介绍就可以了，我就不多说了。</p>
+<p>还有很重要的一点需要提一下，这跟本篇博文要解释的现象有关。qemu脚本里可以从标准输入读取信息，就是虚机的完整xml配置啦。也可以向标准输出和标准错误输出信息。那么stdin，stdout，stderr连接到了哪里呢，当然是libvirtd了，总不可能是终端吧。</p>
+<p>有了hook脚本后，就可以做一些小动作啦。比如在虚机启动之前运行一个监视脚本，虚机关闭后停止监视脚本。看起来很简单明了的事情嘛，开始动手，在qemu脚本里设置了在started的时候启动一个后台脚本，然后，然后，virsh start 启动虚机竟然卡在了那里，没有顺利启动。。。</p>
+<p>没道理啊，虽然官方介绍里提到了libvirtd会等待hook 脚本运行结束，但是qemu 脚本里将后台脚本放到后台运行，qemu脚本自身应该是马上退出才是，没道理libvirtd还会等待孙子进程的结束，linux下也不提供等待孙子进程结束的api啊（为此还特地查了一下，确保自己不是孤陋寡闻）。</p>
+<p>问题出现了，只能查了。先简化了一下qemu脚本，如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"> </span></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$2</span> <span class="keyword">in</span></span><br><span class="line">    <span class="string">"started"</span>)</span><br><span class="line">        sleep <span class="number">100</span> &amp;</span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure></p>
+<p>很简单吧，可惜就是不行，virsh start 虚机会一直等待100秒。后台看了一下，qemu脚本已经停止运行，有一个sleep进程正在运行。<br>强行杀掉sleep进程，virsh start 就可以顺利运行下去。</p>
+<p>只能看一下源码，看看发生什么事情了。看的是libvirt-1.2.15的源码， 相近的版本应该差异不大。</p>
+<p>virHookCall -&gt; virCommandRun<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">virCommandRun</span><span class="params">(virCommandPtr cmd, <span class="keyword">int</span> *exitstatus)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">bool</span> string_io;</span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*cmd-&gt;inbuf里存放的是虚机的xml，outbuf和errbuf为NULL</span><br><span class="line">      string_io值为true*/</span></span><br><span class="line">    string_io = cmd-&gt;inbuf || cmd-&gt;outbuf || cmd-&gt;errbuf;</span><br><span class="line">     </span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*同步执行命令*/</span></span><br><span class="line">    cmd-&gt;flags |= VIR_EXEC_RUN_SYNC;</span><br><span class="line">    <span class="keyword">if</span> (virCommandRunAsync(cmd, <span class="literal">NULL</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        cmd-&gt;has_error = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*sring_io为true，因此会在此处处理io*/</span></span><br><span class="line">    <span class="keyword">if</span> (string_io) &#123;</span><br><span class="line">        VIR_FORCE_CLOSE(cmd-&gt;infd);</span><br><span class="line">        ret = virCommandProcessIO(cmd);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*此处等待子进程结束，封装了waitpid*/</span>/</span><br><span class="line">    <span class="keyword">if</span> (virCommandWait(cmd, exitstatus) &lt; <span class="number">0</span>)</span><br><span class="line">        ret = -<span class="number">1</span>;</span><br><span class="line"> </span><br><span class="line">     ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>virCommandRunAsync想必是封装了fork和exec，virCommandWait封装了waipid，那么问题就会出在中间的virCommandProcessIO上。还是先看一下virCommandRunAsync做了什么：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">virCommandRunAsync(virCommandPtr cmd, <span class="keyword">pid_t</span> *pid)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">bool</span> synchronous = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">int</span> infd[<span class="number">2</span>] = &#123;-<span class="number">1</span>, -<span class="number">1</span>&#125;;</span><br><span class="line"> </span><br><span class="line">    synchronous = cmd-&gt;flags &amp; VIR_EXEC_RUN_SYNC;</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (cmd-&gt;inbuf &amp;&amp; cmd-&gt;infd == -<span class="number">1</span> &amp;&amp;</span><br><span class="line">        (synchronous || cmd-&gt;flags &amp; VIR_EXEC_ASYNC_IO)) &#123;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/*代码执行到这里*/</span></span><br><span class="line">        <span class="keyword">if</span> (pipe2(infd, O_CLOEXEC) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            virReportSystemError(errno, <span class="string">"%s"</span>,</span><br><span class="line">                                 _(<span class="string">"unable to open pipe"</span>));</span><br><span class="line">            cmd-&gt;has_error = -<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cmd-&gt;infd = infd[<span class="number">0</span>];</span><br><span class="line">        cmd-&gt;inpipe = infd[<span class="number">1</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((cmd-&gt;inbuf &amp;&amp; cmd-&gt;infd == -<span class="number">1</span>) ||</span><br><span class="line">               (cmd-&gt;outbuf &amp;&amp; cmd-&gt;outfdptr != &amp;cmd-&gt;outfd) ||</span><br><span class="line">               (cmd-&gt;errbuf &amp;&amp; cmd-&gt;errfdptr != &amp;cmd-&gt;errfd)) &#123;</span><br><span class="line">        virReportError(VIR_ERR_INTERNAL_ERROR, <span class="string">"%s"</span>,</span><br><span class="line">                       _(<span class="string">"cannot mix string I/O with asynchronous command"</span>));</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    ret = virExec(cmd);</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>再看看virExec就明白了，抽取了相关的代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line"><span class="title">virExec</span><span class="params">(virCommandPtr cmd)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> pipeout[<span class="number">2</span>] = &#123;-<span class="number">1</span>, -<span class="number">1</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> pipeerr[<span class="number">2</span>] = &#123;-<span class="number">1</span>, -<span class="number">1</span>&#125;;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">int</span> childin = cmd-&gt;infd;</span><br><span class="line">    <span class="keyword">int</span> childout = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> childerr = -<span class="number">1</span>;</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*和之前的infd处理一样，通过pipe建立了一对文件描述符*/</span></span><br><span class="line">    <span class="keyword">if</span> (cmd-&gt;outfdptr != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (*cmd-&gt;outfdptr == -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pipe2(pipeout, O_CLOEXEC) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                virReportSystemError(errno,</span><br><span class="line">                                     <span class="string">"%s"</span>, _(<span class="string">"cannot create pipe"</span>));</span><br><span class="line">                <span class="keyword">goto</span> cleanup;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">if</span> ((cmd-&gt;flags &amp; VIR_EXEC_NONBLOCK) &amp;&amp;</span><br><span class="line">                virSetNonBlock(pipeout[<span class="number">0</span>]) == -<span class="number">1</span>) &#123;</span><br><span class="line">                virReportSystemError(errno, <span class="string">"%s"</span>,</span><br><span class="line">                                     _(<span class="string">"Failed to set non-blocking file descriptor flag"</span>));</span><br><span class="line">                <span class="keyword">goto</span> cleanup;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            childout = pipeout[<span class="number">1</span>];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            childout = *cmd-&gt;outfdptr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (getDevNull(&amp;null) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">goto</span> cleanup;</span><br><span class="line">        childout = null;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (cmd-&gt;errfdptr != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cmd-&gt;errfdptr == cmd-&gt;outfdptr) &#123;</span><br><span class="line">            childerr = childout;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (*cmd-&gt;errfdptr == -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pipe2(pipeerr, O_CLOEXEC) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                virReportSystemError(errno,</span><br><span class="line">                                     <span class="string">"%s"</span>, _(<span class="string">"Failed to create pipe"</span>));</span><br><span class="line">                <span class="keyword">goto</span> cleanup;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">if</span> ((cmd-&gt;flags &amp; VIR_EXEC_NONBLOCK) &amp;&amp;</span><br><span class="line">                virSetNonBlock(pipeerr[<span class="number">0</span>]) == -<span class="number">1</span>) &#123;</span><br><span class="line">                virReportSystemError(errno, <span class="string">"%s"</span>,</span><br><span class="line">                                     _(<span class="string">"Failed to set non-blocking file descriptor flag"</span>));</span><br><span class="line">                <span class="keyword">goto</span> cleanup;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            childerr = pipeerr[<span class="number">1</span>];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            childerr = *cmd-&gt;errfdptr;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (getDevNull(&amp;null) &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">goto</span> cleanup;</span><br><span class="line">        childerr = null;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">/*封装了fork，对于子进程，清空了从父进程继承来的信号处理函数，</span><br><span class="line">      以及信号屏蔽字*/</span></span><br><span class="line">    pid = virFork();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* 父进程关闭掉pipeout和pipeerr的写端就返回了，cmd-&gt;pid记录了</span><br><span class="line">       子进程的pid */</span></span><br><span class="line">    <span class="keyword">if</span> (pid) &#123; <span class="comment">/* parent */</span></span><br><span class="line">        VIR_FORCE_CLOSE(null);</span><br><span class="line">        <span class="keyword">if</span> (cmd-&gt;outfdptr &amp;&amp; *cmd-&gt;outfdptr == -<span class="number">1</span>) &#123;</span><br><span class="line">            VIR_FORCE_CLOSE(pipeout[<span class="number">1</span>]);</span><br><span class="line">            *cmd-&gt;outfdptr = pipeout[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (cmd-&gt;errfdptr &amp;&amp; *cmd-&gt;errfdptr == -<span class="number">1</span>) &#123;</span><br><span class="line">            VIR_FORCE_CLOSE(pipeerr[<span class="number">1</span>]);</span><br><span class="line">            *cmd-&gt;errfdptr = pipeerr[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        cmd-&gt;pid = pid;</span><br><span class="line"> </span><br><span class="line">        VIR_FREE(binarystr);</span><br><span class="line">        VIR_FREE(groups);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*除了childin，childout，childerr，其他的文件描述符都被被关闭*/</span></span><br><span class="line">    <span class="keyword">for</span> (fd = <span class="number">3</span>; fd &lt; openmax; fd++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (fd == childin || fd == childout || fd == childerr)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span> (!virCommandFDIsSet(cmd, fd)) &#123;</span><br><span class="line">            <span class="comment">/*对于hook 脚本，总是走到这里，而不是下面的分支*/</span></span><br><span class="line">            tmpfd = fd;</span><br><span class="line">            VIR_MASS_CLOSE(tmpfd);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (virSetInherit(fd, <span class="literal">true</span>) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            virReportSystemError(errno, _(<span class="string">"failed to preserve fd %d"</span>), fd);</span><br><span class="line">            <span class="keyword">goto</span> fork_error;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*如果childin等于STDIN_FILENO,也就是0,那么直接清除FD_CLOEXEC,</span><br><span class="line">      确保执行exec时可以继承0这个fd，否则使用dup2，重定向标准输入为</span><br><span class="line">      childin*/</span></span><br><span class="line">    <span class="keyword">if</span> (prepareStdFd(childin, STDIN_FILENO) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        virReportSystemError(errno,</span><br><span class="line">                             <span class="string">"%s"</span>, _(<span class="string">"failed to setup stdin file handle"</span>));</span><br><span class="line">        <span class="keyword">goto</span> fork_error;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (childout &gt; <span class="number">0</span> &amp;&amp; prepareStdFd(childout, STDOUT_FILENO) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        virReportSystemError(errno,</span><br><span class="line">                             <span class="string">"%s"</span>, _(<span class="string">"failed to setup stdout file handle"</span>));</span><br><span class="line">        <span class="keyword">goto</span> fork_error;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (childerr &gt; <span class="number">0</span> &amp;&amp; prepareStdFd(childerr, STDERR_FILENO) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        virReportSystemError(errno,</span><br><span class="line">                             <span class="string">"%s"</span>, _(<span class="string">"failed to setup stderr file handle"</span>));</span><br><span class="line">        <span class="keyword">goto</span> fork_error;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/*如果childin不等于STDIN_FILENO,就需要关闭它，标准输入那里还有一个备份*/</span></span><br><span class="line">    <span class="keyword">if</span> (childin != STDIN_FILENO &amp;&amp; childin != null &amp;&amp;</span><br><span class="line">        childin != childerr &amp;&amp; childin != childout)</span><br><span class="line">        VIR_FORCE_CLOSE(childin);</span><br><span class="line">    <span class="keyword">if</span> (childout &gt; STDERR_FILENO &amp;&amp; childout != null &amp;&amp; childout != childerr)</span><br><span class="line">        VIR_FORCE_CLOSE(childout);</span><br><span class="line">    <span class="keyword">if</span> (childerr &gt; STDERR_FILENO &amp;&amp; childerr != null)</span><br><span class="line">        VIR_FORCE_CLOSE(childerr);</span><br><span class="line"> </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line"><span class="title">prepareStdFd</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> <span class="built_in">std</span>)</span></span><br><span class="line"></span>&#123;  </span><br><span class="line">    <span class="keyword">if</span> (fd == <span class="built_in">std</span>)</span><br><span class="line">        <span class="keyword">return</span> virSetInherit(fd, <span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (dup2(fd, <span class="built_in">std</span>) != <span class="built_in">std</span>)</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">virSetInherit</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">bool</span> inherit)</span></span><br><span class="line"></span>&#123;                           </span><br><span class="line">    <span class="keyword">int</span> fflags;</span><br><span class="line">    <span class="keyword">if</span> ((fflags = fcntl(fd, F_GETFD)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (inherit)</span><br><span class="line">        fflags &amp;= ~FD_CLOEXEC;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        fflags |= FD_CLOEXEC;</span><br><span class="line">    <span class="keyword">if</span> ((fcntl(fd, F_SETFD, fflags)) &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在就很清晰了，为了父子进程通信，父进程创建了三个pipe，并将子进程的标准输入重定向为pipein的读端，标准输出重定向为pipeout的写端，标准错误重定向为pipeerr的写端。</p>
+<p>剩下virCommandProcessIO就不贴代码了，大体是一个循环里不断poll 父进程这边的三个文件描述符，除非子进程关闭对端的文件描述符，否则就会一直与子进程等待通信。</p>
+<p>到此为止，事情很明了了，由于virCommandProcessIO卡在virCommandWait之前，如果像之前做的那样，hook脚本里执行一个后台脚本然后自己结束，由于shell脚本里执行一般的命令实际上是创建了一个子进程，子进程默认继承了父进程的文件描述符，因此hook 脚本退出后，libvirtd创建的pipe并没有断开，还保持着连接，直到这个孙子以及孙子的孙子的孙子完全退出或者明确关闭掉标准输入，标准输出，标准错误，否则libvirtd会一直卡在virCommandProcessIO。</p>
+<p>想想好可怕，因为一个虚机的hook脚本会导致守护进程完全卡住，如果hook脚本的后台子进程一直运行下去，libvirtd就会和这个孙子一直相守到天荒地老。。。</p>
+<p>解决办法很简单了，hook脚本执行需要放到后台的程序之前，关闭掉标准输入，标准输出，标准错误就行了。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"> </span><br><span class="line"> </span></span><br><span class="line"><span class="built_in">exec</span> <span class="number">0</span>&gt;&amp;-</span><br><span class="line"><span class="built_in">exec</span> <span class="number">1</span>&gt;&amp;-</span><br><span class="line"><span class="built_in">exec</span> <span class="number">2</span>&gt;&amp;-</span><br><span class="line"> </span><br><span class="line"><span class="keyword">case</span> <span class="variable">$2</span> <span class="keyword">in</span></span><br><span class="line">    <span class="string">"started"</span>)</span><br><span class="line">        sleep <span class="number">100</span> &amp;</span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          QEMU MEMORY REGION 使用记录
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

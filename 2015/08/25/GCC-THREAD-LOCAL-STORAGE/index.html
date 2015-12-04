@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/12 | Hong&#39;s blog</title>
+  <title>GCC THREAD LOCAL STORAGE | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hong's blog">
-<meta property="og:url" content="http://huchhong.github.io/archives/2015/12/index.html">
+  <meta name="description" content="在qemu里面看到一些变量之前有一个标记 __thread, 不认识，查了一下，原来是gcc的一个机制，标记上的变量成为了每个线程本地存储的变量，也就是每个线程看到的变量都独属于自己，如果用地址引用&amp;amp; 查看的话，每个线程看到的变量地址是不一样的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GCC THREAD LOCAL STORAGE">
+<meta property="og:url" content="http://huchhong.github.io/2015/08/25/GCC-THREAD-LOCAL-STORAGE/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description">
+<meta property="og:description" content="在qemu里面看到一些变量之前有一个标记 __thread, 不认识，查了一下，原来是gcc的一个机制，标记上的变量成为了每个线程本地存储的变量，也就是每个线程看到的变量都独属于自己，如果用地址引用&amp;amp; 查看的话，每个线程看到的变量地址是不一样的。">
+<meta property="og:updated_time" content="2015-12-04T14:27:15.802Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hong's blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="GCC THREAD LOCAL STORAGE">
+<meta name="twitter:description" content="在qemu里面看到一些变量之前有一个标记 __thread, 不认识，查了一下，原来是gcc的一个机制，标记上的变量成为了每个线程本地存储的变量，也就是每个线程看到的变量都独属于自己，如果用地址引用&amp;amp; 查看的话，每个线程看到的变量地址是不一样的。">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -165,53 +166,94 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-GCC-THREAD-LOCAL-STORAGE" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/12/03/LEVELDB-ATOMICPOINTER/" class="archive-article-date">
-  	<time datetime="2015-12-03T11:53:02.000Z" itemprop="datePublished">12月 3</time>
+    <div class="article-meta">
+      <a href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/" class="article-date">
+  	<time datetime="2015-08-24T16:00:00.000Z" itemprop="datePublished">2015-08-25</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/12/03/LEVELDB-ATOMICPOINTER/">LEVELDB ATOMICPOINTER</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      GCC THREAD LOCAL STORAGE
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发编程/">并发编程</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gcc/">gcc</a></li></ul>
 	</div>
 
-          
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      </div>
+      
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在qemu里面看到一些变量之前有一个标记 __thread, 不认识，查了一下，原来是gcc的一个机制，标记上的变量成为了每个线程本地存储的变量，也就是每个线程看到的变量都独属于自己，如果用地址引用&amp; 查看的话，每个线程看到的变量地址是不一样的。</p>
+<a id="more"></a>
+<p>这是一个很方便的属性，相比于pthread_key_create这样的方法要简单不少，但是pthread_key_create也有可取之处，那就是可以设定线程结束时的清理函数，这是__thread办不到的。因此这两个设置线程本地变量的方法在qemu里各有用处。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          QEMU 里COROUTINE POOL 的演进
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/25/LINUX-时钟函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LINUX 时钟函数</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
 
 </div>
       <footer id="footer">
@@ -237,8 +279,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false

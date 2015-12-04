@@ -105,7 +105,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a>
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/C-C-qemu/" style="font-size: 10px;">C/C++ qemu</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
 					</div>
 				</section>
 				
@@ -170,8 +170,8 @@
     <article id="post-LEVELDB-ATOMICPOINTER" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/12/04/LEVELDB-ATOMICPOINTER/" class="article-date">
-  	<time datetime="2015-12-04T11:53:02.000Z" itemprop="datePublished">2015-12-04</time>
+      <a href="/2015/12/03/LEVELDB-ATOMICPOINTER/" class="article-date">
+  	<time datetime="2015-12-03T11:53:02.000Z" itemprop="datePublished">2015-12-03</time>
 </a>
     </div>
   
@@ -184,7 +184,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/04/LEVELDB-ATOMICPOINTER/">LEVELDB ATOMICPOINTER</a>
+      <a class="article-title" href="/2015/12/03/LEVELDB-ATOMICPOINTER/">LEVELDB ATOMICPOINTER</a>
     </h1>
   
 
@@ -205,14 +205,10 @@
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/并发编程/">并发编程</a>
-	</div>
-
 
       
         <p class="article-more-link">
-          <a  href="/2015/12/04/LEVELDB-ATOMICPOINTER/#more">more >></a>
+          <a  href="/2015/12/03/LEVELDB-ATOMICPOINTER/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -232,8 +228,8 @@
     <article id="post-LINUX-SOCKET-REUSEADDR" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/12/04/LINUX-SOCKET-REUSEADDR/" class="article-date">
-  	<time datetime="2015-12-04T09:03:47.000Z" itemprop="datePublished">2015-12-04</time>
+      <a href="/2015/09/19/LINUX-SOCKET-REUSEADDR/" class="article-date">
+  	<time datetime="2015-09-18T16:00:00.000Z" itemprop="datePublished">2015-09-19</time>
 </a>
     </div>
   
@@ -246,7 +242,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/04/LINUX-SOCKET-REUSEADDR/">LINUX SOCKET REUSEADDR</a>
+      <a class="article-title" href="/2015/09/19/LINUX-SOCKET-REUSEADDR/">LINUX SOCKET REUSEADDR</a>
     </h1>
   
 
@@ -262,15 +258,15 @@
     <div class="article-info article-info-index">
       
       
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/linux/">linux</a>
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
 	</div>
 
+      
 
       
         <p class="article-more-link">
-          <a  href="/2015/12/04/LINUX-SOCKET-REUSEADDR/#more">more >></a>
+          <a  href="/2015/09/19/LINUX-SOCKET-REUSEADDR/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -287,6 +283,474 @@
 
 
   
+    <article id="post-QEMU-RFIFO-LOCK" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/10/QEMU-RFIFO-LOCK/" class="article-date">
+  	<time datetime="2015-09-09T16:00:00.000Z" itemprop="datePublished">2015-09-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/10/QEMU-RFIFO-LOCK/">QEMU RFIFO_LOCK</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu里实现了一种可递归的，排队的锁，其实是的pthread锁的简单封装，代码很简洁，在此列出来，算是学习。版本是qemu 2.4，源文件在util/rfifo_lock.c和include/qemu/rfifo_lock.h<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/10/QEMU-RFIFO-LOCK/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-设备模拟的前提" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/09/03/QEMU-设备模拟的前提/" class="article-date">
+  	<time datetime="2015-09-02T16:00:00.000Z" itemprop="datePublished">2015-09-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/03/QEMU-设备模拟的前提/">QEMU 设备模拟的前提</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu 能够模拟很多设备这是大家都知道的，但是一个前提是模拟的设备如何让虚机感知到，这是曾经困扰我的一个问题。这个问题的回答需要结合kvm，也就是cpu的虚拟化和内存的虚拟化来理解。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化/">虚拟化</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/09/03/QEMU-设备模拟的前提/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-LINUX-信号" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/30/LINUX-信号/" class="article-date">
+  	<time datetime="2015-08-29T16:00:00.000Z" itemprop="datePublished">2015-08-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/30/LINUX-信号/">LINUX 信号</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="查阅">查阅</h2><p>好的查阅文档都在linux自带的manual里。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/30/LINUX-信号/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-里的队列" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/26/QEMU-里的队列/" class="article-date">
+  	<time datetime="2015-08-25T16:00:00.000Z" itemprop="datePublished">2015-08-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/26/QEMU-里的队列/">QEMU 里的队列</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu里的队列代码在 include/qemu/queue.h里，从注释看，它是从netbsd直接拷贝过来的，可见该代码足够优秀并且复用性很高，现将整个头文件贴过来，方便日后欣赏和复用。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/26/QEMU-里的队列/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-里COROUTINE-POOL-的演进" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/" class="article-date">
+  	<time datetime="2015-08-25T16:00:00.000Z" itemprop="datePublished">2015-08-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/">QEMU 里COROUTINE POOL 的演进</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu的coroutine为了减少不断创建和销毁，建立了pool来存储coroutine。这部分代码可以在qemu-coroutine.c里看到。我注意到从2.2.1版本的qemu到2.3和2.4版本的qemu，这部分代码有了改进。贴出这部分代码作为程序改进的范例学习。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-GCC-THREAD-LOCAL-STORAGE" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/" class="article-date">
+  	<time datetime="2015-08-24T16:00:00.000Z" itemprop="datePublished">2015-08-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/">GCC THREAD LOCAL STORAGE</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在qemu里面看到一些变量之前有一个标记 __thread, 不认识，查了一下，原来是gcc的一个机制，标记上的变量成为了每个线程本地存储的变量，也就是每个线程看到的变量都独属于自己，如果用地址引用&amp; 查看的话，每个线程看到的变量地址是不一样的。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gcc/">gcc</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-LINUX-时钟函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/25/LINUX-时钟函数/" class="article-date">
+  	<time datetime="2015-08-24T16:00:00.000Z" itemprop="datePublished">2015-08-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/25/LINUX-时钟函数/">LINUX 时钟函数</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/25/LINUX-时钟函数/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-里PTHREAD-KEY-T-的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" class="article-date">
+  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/">QEMU 里PTHREAD_KEY_T 的使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>pthread_key_t的说明可以看 <a href="http://linux.die.net/man/3/pthread_key_create">http://linux.die.net/man/3/pthread_key_create</a>，相关的api只有pthread_key_create,pthread_setspecific,pthread_getspecific, pthread_key_delete。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
