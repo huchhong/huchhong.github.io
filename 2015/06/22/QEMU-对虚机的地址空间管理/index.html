@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>QEMU 对虚机的地址空间管理 | Hong&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言cpu有两个地址空间：io 地址空间和内存地址空间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QEMU 对虚机的地址空间管理">
+<meta property="og:url" content="http://huchhong.github.io/2015/06/22/QEMU-对虚机的地址空间管理/index.html">
+<meta property="og:site_name" content="Hong's blog">
+<meta property="og:description" content="前言cpu有两个地址空间：io 地址空间和内存地址空间。">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/2015-06-14-113911屏幕截图.png">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/2015-06-14-114310屏幕截图-300x279.png">
+<meta property="og:updated_time" content="2015-12-04T15:02:28.542Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QEMU 对虚机的地址空间管理">
+<meta name="twitter:description" content="前言cpu有两个地址空间：io 地址空间和内存地址空间。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Chaohong Hu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Chaohong Hu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xowlb.com1.z0.glb.clouddn.com/u=4074885463,3533660756&amp;fm=21&amp;gp=0.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Chaohong Hu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-QEMU-对虚机的地址空间管理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/06/22/QEMU-对虚机的地址空间管理/" class="article-date">
+  	<time datetime="2015-06-21T16:00:00.000Z" itemprop="datePublished">2015-06-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      QEMU 对虚机的地址空间管理
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言">前言</h2><p>cpu有两个地址空间：io 地址空间和内存地址空间。<a id="more"></a>io地址空间是给设备用的，平时说设备占有哪些端口，指的就是io地址空间里的地址。内存地址空间相对比较复杂，这个地址空间被DRAM，设备和Flash rom等使用，最终呈现给cpu的是一个线性地址空间。</p>
+<p>附：平时编程说的物理地址指的是内存地址空间的地址，不要误认为这个地址一定是物理内存，譬如3G以上的物理地址很可能对应的是某个PCI设备。</p>
+<p>什么是线性地址空间，鉴于不同的地方对这个名词有不同的解释，先在文章的开头申明一下，本文说的线性地址空间指的是从cpu的角度看到的一段连续的可以访问的地址空间，其中包括了真正的物理内存RAM，PCI地址空间，还有一些设备的ROM占据的地址空间，这些地址空间互相重叠最后呈现给cpu的是一个统一的线性的地址空间。<br>附上两张图：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/2015-06-14-113911屏幕截图.png" alt="img1"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/2015-06-14-114310屏幕截图-300x279.png" alt="img2"></p>
+<p>这两图截自两篇系列文章： <a href="http://resources.infosecinstitute.com/system-address-map-initialization-in-x86x64-architecture-part-1-pci-based-systems/" target="_blank" rel="external">System Address Map Initialization in x86/x64 Architecture Part 1: PCI-Based Systems</a> <a href="http://resources.infosecinstitute.com/system-address-map-initialization-x86x64-architecture-part-2-pci-express-based-systems/" target="_blank" rel="external">System Address Map Initialization in x86/x64 Architecture Part 2: PCI Express-Based Systems</a> 这两篇文章详细解释了pci和pcie设备在系统地址里的映射，对于理解线性地址空间和pci设备有很好的帮助，强烈建议仔细阅读。</p>
+<h2 id="qemu维护地址空间">qemu维护地址空间</h2><p>qemu负责模拟虚机的外设，因此虚机的线性地址空间主要由qemu进行管理，也就是确定线性地址空间中哪段地址属于哪个设备或者DRAM或者其他的什么。通过qemu的monitor可以查看运行中的虚机的地址空间，如果用libvirt启动的话，可以这样查看：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virsh qemu-monitor-<span class="command"><span class="keyword">command</span> –<span class="title">hmpinfo</span> <span class="title">mtree</span></span></span><br></pre></td></tr></table></figure></p>
+<p>注： qemu源码里有一篇文档介绍了qemu的虚机内存管理 Docs/memory.txt</p>
+<h3 id="address_space_和_memory_region">address space 和 memory region</h3><p>在qemu里有几个重要的数据结构来维护虚机的线性地址空间： AddressSpace, MemoryRegion, FlatView, MemoryListener等。<br>在memory_map_init 中可以看到对两个最重要的address space的初始化: address_space_memory 和 address_space_io</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">memory_map_init</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    system_memory = g_malloc(<span class="keyword">sizeof</span>(*system_memory));</span><br><span class="line"> </span><br><span class="line">    memory_region_init(system_memory, <span class="literal">NULL</span>, <span class="string">"system"</span>, UINT64_MAX);</span><br><span class="line">    <span class="comment">//每个address space 都有个root memory region</span></span><br><span class="line">    address_space_init(&amp;address_space_memory, system_memory, <span class="string">"memory"</span>);</span><br><span class="line"> </span><br><span class="line">    system_io = g_malloc(<span class="keyword">sizeof</span>(*system_io));</span><br><span class="line">    memory_region_init_io(system_io, <span class="literal">NULL</span>, &amp;unassigned_io_ops, <span class="literal">NULL</span>, <span class="string">"io"</span>,</span><br><span class="line">                          <span class="number">65536</span>);</span><br><span class="line">    address_space_init(&amp;address_space_io, system_io, <span class="string">"I/O"</span>);</span><br><span class="line"> </span><br><span class="line">    memory_listener_register(&amp;core_memory_listener, &amp;address_space_memory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>address_space_memory其实就是虚机的线性地址空间（设备的mmio分布在这个地址空间），address_space_io是虚机的io地址空间（设备的io port就分布在这个地址空间里）。<br>不管是DRAM还是设备的资源都要通过memory region添加到address space里。</p>
+<h3 id="DRAM的memory_region">DRAM的memory region</h3><p>DRAM的memory_region初始化在pc_memory_init里可以看到：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FWCfgState *<span class="title">pc_memory_init</span><span class="params">(MachineState *machine,</span><br><span class="line">                           MemoryRegion *system_memory,</span><br><span class="line">                           ram_addr_t below_4g_mem_size,</span><br><span class="line">                           ram_addr_t above_4g_mem_size,</span><br><span class="line">                           MemoryRegion *rom_memory,</span><br><span class="line">                           MemoryRegion **ram_memory,</span><br><span class="line">                           PcGuestInfo *guest_info)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    ram = g_malloc(<span class="keyword">sizeof</span>(*ram));</span><br><span class="line">    memory_region_allocate_system_memory(ram, <span class="literal">NULL</span>, <span class="string">"pc.ram"</span>,</span><br><span class="line">                                         machine-&gt;ram_size);</span><br><span class="line">    *ram_memory = ram;</span><br><span class="line">    ram_below_4g = g_malloc(<span class="keyword">sizeof</span>(*ram_below_4g));</span><br><span class="line">    memory_region_init_alias(ram_below_4g, <span class="literal">NULL</span>, <span class="string">"ram-below-4g"</span>, ram,</span><br><span class="line">                             <span class="number">0</span>, below_4g_mem_size);</span><br><span class="line">    <span class="comment">//ram-below-4g到4G之间的地址主要是留给PCI设备的mmio地址使用</span></span><br><span class="line">    memory_region_add_subregion(system_memory, <span class="number">0</span>, ram_below_4g);</span><br><span class="line">    e820_add_entry(<span class="number">0</span>, below_4g_mem_size, E820_RAM);</span><br><span class="line">    <span class="keyword">if</span> (above_4g_mem_size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        ram_above_4g = g_malloc(<span class="keyword">sizeof</span>(*ram_above_4g));</span><br><span class="line">        memory_region_init_alias(ram_above_4g, <span class="literal">NULL</span>, <span class="string">"ram-above-4g"</span>, ram,</span><br><span class="line">                                 below_4g_mem_size, above_4g_mem_size);</span><br><span class="line">        memory_region_add_subregion(system_memory, <span class="number">0x100000000</span>ULL,</span><br><span class="line">                                    ram_above_4g);</span><br><span class="line">        e820_add_entry(<span class="number">0x100000000</span>ULL, above_4g_mem_size, E820_RAM);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>legacy devices的地址一般是固定的，在设备初始化的时候就可以通过memory_region_add_subregion加入到地址空间的确切位置。</p>
+<h3 id="pci设备的memory_region">pci设备的memory region</h3><p>PCI设备的资源在地址空间中的偏移是动态不确定的，一般PCI设备需要的memory region对应的就是bar，一开始初始化memory region，然后用pci_register_bar注册bar。那么到底在什么地方将bar对应的memory region添加到address space里呢？<br>看一下pci_update_mappings函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pci_update_mappings</span><span class="params">(PCIDevice *d)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; PCI_NUM_REGIONS; i++) &#123; r = &amp;d-&gt;io_regions[i];</span><br><span class="line">        ...</span><br><span class="line"> </span><br><span class="line">        new_addr = pci_bar_address(d, i, r-&gt;type, r-&gt;size);</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* This bar isn't changed */</span></span><br><span class="line">        <span class="keyword">if</span> (new_addr == r-&gt;addr)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* now do the real mapping */</span></span><br><span class="line">        <span class="keyword">if</span> (r-&gt;addr != PCI_BAR_UNMAPPED) &#123;</span><br><span class="line">            trace_pci_update_mappings_del(d, pci_bus_num(d-&gt;bus),</span><br><span class="line">                                          PCI_FUNC(d-&gt;devfn),</span><br><span class="line">                                          PCI_SLOT(d-&gt;devfn),</span><br><span class="line">                                          i, r-&gt;addr, r-&gt;size);</span><br><span class="line">            memory_region_del_subregion(r-&gt;address_space, r-&gt;memory);</span><br><span class="line">        &#125;</span><br><span class="line">        r-&gt;addr = new_addr;</span><br><span class="line">        <span class="keyword">if</span> (r-&gt;addr != PCI_BAR_UNMAPPED) &#123;</span><br><span class="line">            trace_pci_update_mappings_add(d, pci_bus_num(d-&gt;bus),</span><br><span class="line">                                          PCI_FUNC(d-&gt;devfn),</span><br><span class="line">                                          PCI_SLOT(d-&gt;devfn),</span><br><span class="line">                                          i, r-&gt;addr, r-&gt;size);</span><br><span class="line">            <span class="comment">/*r-&gt;address_space的赋值在pci_register_bar里完成*/</span></span><br><span class="line">            memory_region_add_subregion_overlap(r-&gt;address_space,</span><br><span class="line">                                                r-&gt;addr, r-&gt;memory, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pci_register_bar</span><span class="params">(PCIDevice *pci_dev, <span class="keyword">int</span> region_num,</span><br><span class="line">                      uint8_t type, MemoryRegion *memory)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    pci_dev-&gt;io_regions[region_num].address_space</span><br><span class="line">        = type &amp; PCI_BASE_ADDRESS_SPACE_IO</span><br><span class="line">        ? pci_dev-&gt;bus-&gt;address_space_io</span><br><span class="line">        : pci_dev-&gt;bus-&gt;address_space_mem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>pci bus 的address_space_io和address_space_mem又是在哪里定义的？<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pc_init1</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    MemoryRegion *system_io = get_system_io();</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (pci_enabled) &#123;</span><br><span class="line">        pci_memory = g_new(MemoryRegion, <span class="number">1</span>);</span><br><span class="line">        memory_region_init(pci_memory, <span class="literal">NULL</span>, <span class="string">"pci"</span>, UINT64_MAX);</span><br><span class="line">        rom_memory = pci_memory;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (pci_enabled) &#123;</span><br><span class="line">        pci_bus = i440fx_init(&amp;i440fx_state, &amp;piix3_devfn, &amp;isa_bus, gsi,</span><br><span class="line">                              system_memory, system_io, machine-&gt;ram_size,</span><br><span class="line">                              below_4g_mem_size,</span><br><span class="line">                              above_4g_mem_size,</span><br><span class="line">                              pci_memory, ram_memory);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function">PCIBus *<span class="title">i440fx_init</span><span class="params">(PCII440FXState **pi440fx_state,</span><br><span class="line">                    <span class="keyword">int</span> *piix3_devfn,</span><br><span class="line">                    ISABus **isa_bus, qemu_irq *pic,</span><br><span class="line">                    MemoryRegion *address_space_mem,</span><br><span class="line">                    MemoryRegion *address_space_io,</span><br><span class="line">                    ram_addr_t ram_size,</span><br><span class="line">                    ram_addr_t below_4g_mem_size,</span><br><span class="line">                    ram_addr_t above_4g_mem_size,</span><br><span class="line">                    MemoryRegion *pci_address_space,</span><br><span class="line">                    MemoryRegion *ram_memory)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    b = pci_bus_new(dev, <span class="literal">NULL</span>, pci_address_space,</span><br><span class="line">                    address_space_io, <span class="number">0</span>, TYPE_PCI_BUS);</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/* setup pci memory mapping */</span></span><br><span class="line">    pc_pci_as_mapping_init(OBJECT(f), f-&gt;system_memory,</span><br><span class="line">                           f-&gt;pci_address_space);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function">PCIBus *<span class="title">pci_bus_new</span><span class="params">(DeviceState *parent, <span class="keyword">const</span> <span class="keyword">char</span> *name,</span><br><span class="line">                    MemoryRegion *address_space_mem,</span><br><span class="line">                    MemoryRegion *address_space_io,</span><br><span class="line">                    uint8_t devfn_min, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">typename</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    pci_bus_init(bus, parent, name, address_space_mem,</span><br><span class="line">                 address_space_io, devfn_min);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pci_bus_init</span><span class="params">(PCIBus *bus, DeviceState *parent,</span><br><span class="line">                         <span class="keyword">const</span> <span class="keyword">char</span> *name,</span><br><span class="line">                         MemoryRegion *address_space_mem,</span><br><span class="line">                         MemoryRegion *address_space_io,</span><br><span class="line">                         uint8_t devfn_min)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    bus-&gt;address_space_mem = address_space_mem;</span><br><span class="line">    bus-&gt;address_space_io = address_space_io;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pc_pci_as_mapping_init</span><span class="params">(Object *owner, MemoryRegion *system_memory,</span><br><span class="line">                            MemoryRegion *pci_address_space)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">/* Set to lower priority than RAM */</span></span><br><span class="line">    memory_region_add_subregion_overlap(system_memory, <span class="number">0x0</span>,</span><br><span class="line">                                        pci_address_space, -<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从上面的代码片段可以看出pci bus的address_space_io就是address_space_io的root memory region，而address_space_mem是新建的一个属于pci设备的总的memory region，在pc_pci_as_mapping_init里将pci_address_space以-1的优先级加入到system_memory里，将pci设备的地址空间和线性地址空间进行统一。<br>而每个pci设备在pci_update_mappings里将他们的bar作为sub memory region加入到其附属的pci总线的address_space_io或者address_space_mem里，其实就是添加到统一的io地址空间或者内存地址空间（线性地址空间）。</p>
+<p>回顾一下pci_update_mappings，它是在pci_default_write_config里被调用的，而大部分pci设备写config space的时候都会调用到pci_default_write_config，也就是说虚机的fireware或者OS确定了bar的基地址后，更新config space，然后bar就会正式添加到io地址空间或者线性地址空间，在此之前，qemu里的pci设备只是定义了bar，相当于准备好了硬件，但是还不能在地址空间里看到pci设备的bar。</p>
+<h2 id="内部细节">内部细节</h2><p>有关地址空间分布的api内部有一些细节挺绕的，当初也花了一些时间来理解，这里记录一些认为比较关键的函数点，权充日后按图索骥之用，并不会详细地展开每个函数。</p>
+<h3 id="锁的存在">锁的存在</h3><p>memory_region_add_subregion这样的函数会更新memory region内部的数据结构，可以从代码上看明显没有锁的存在，难道这个函数确保不会被并发访问吗？ 当然不是，在主线程和vcpu线程都可能会更新设备的memory region，因此这类函数一定存在并发使用的可能。那么同步措施到底在哪里做的呢？</p>
+<p>关键在qemu_mutex_lock_iothread这个函数，从下面的代码可以看到这个函数其实就是锁住了一把全局锁。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qemu_mutex_lock_iothread</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    atomic_inc(&amp;iothread_requesting_mutex);</span><br><span class="line">    <span class="keyword">if</span> (!tcg_enabled() || !first_cpu || !first_cpu-&gt;thread) &#123;</span><br><span class="line">        qemu_mutex_lock(&amp;qemu_global_mutex);</span><br><span class="line">        atomic_dec(&amp;iothread_requesting_mutex);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (qemu_mutex_trylock(&amp;qemu_global_mutex)) &#123;</span><br><span class="line">            qemu_cpu_kick_thread(first_cpu);</span><br><span class="line">            qemu_mutex_lock(&amp;qemu_global_mutex);</span><br><span class="line">        &#125;</span><br><span class="line">        atomic_dec(&amp;iothread_requesting_mutex);</span><br><span class="line">        qemu_cond_broadcast(&amp;qemu_io_proceeded_cond);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个函数在vcpu线程里使用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kvm_cpu_exec</span><span class="params">(CPUState *)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    qemu_mutex_unlock_iothread();</span><br><span class="line">    run_ret = kvm_vcpu_ioctl(cpu, KVM_RUN, <span class="number">0</span>);</span><br><span class="line">    qemu_mutex_lock_iothread();</span><br><span class="line">    ...</span><br><span class="line">    一些io 处理的事情，可能会更新地址空间</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到整个线程除了进入kvm没有加锁，其他时候都会加锁。也就是说vcpu线程里处理io事件的时候是会持有这把锁的。</p>
+<p>再看看这把锁在qemu里的应用：</p>
+<p>在os_host_main_loop_wait里有这把锁的存在：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">os_host_main_loop_wait</span><span class="params">(int64_t timeout)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">     <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">        spin_counter = <span class="number">0</span>;</span><br><span class="line">        qemu_mutex_unlock_iothread();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        spin_counter++;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    ret = qemu_poll_ns((GPollFD *)gpollfds-&gt;data, gpollfds-&gt;len, timeout);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (timeout) &#123;</span><br><span class="line">        qemu_mutex_lock_iothread();</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，除了poll的时候释放了锁，其他时候会占有锁。而os_host_main_loop_wait这个函数是主线程里循环等待事件的函数节点，<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">main_loop ()</span><br><span class="line">&#123;</span><br><span class="line">     <span class="keyword">do</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        last_io = main_loop_wait(nonblocking);</span><br><span class="line">        ...</span><br><span class="line">    &#125; <span class="keyword">while</span> (!main_loop_should_exit());</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">main_loop_wait()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    ret = os_host_main_loop_wait(timeout_ns);</span><br><span class="line">    qemu_iohandler_poll(gpollfds, ret);</span><br><span class="line">    ...</span><br><span class="line">    qemu_clock_run_all_timers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>所以主线程里每次处理io事件的时候也会获取这把锁，这时候就可以解释memory region的更新函数里为什么没有看见锁了，因此实际上用的是这一把全局锁。</p>
+<h3 id="memory_region_transaction_begin和memory_region_transaction_commit">memory_region_transaction_begin和memory_region_transaction_commit</h3><p>在每个更新memory region的函数里都能看到这两个函数对，这两个函数对干什么呢？<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">memory_region_transaction_begin</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    qemu_flush_coalesced_mmio_buffer();</span><br><span class="line">    ++memory_region_transaction_depth;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">memory_region_transaction_commit</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    --memory_region_transaction_depth;</span><br><span class="line">    <span class="keyword">if</span> (!memory_region_transaction_depth) &#123;</span><br><span class="line">        地址空间的更新</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>函数对的关键其实是memory_region_transaction_depth的计数，也就是说这两个函数对允许递归调用，在一个函数对内部可以再调用多个函数对，只要函数数量是配对的，那么只有等到最外层memory_region_transaction_commit才会开始地址空间的更新。为什么需要这样做呢，这是因为每次更新地址空间的花销是比较大的，如果把多个memory region的更新操作放在一起执行，那么最终只会产生一次地址空间的更新，这是很划算的。</p>
+<p>在ich9.c里找到了这样的一个例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ich9_pm_iospace_update</span><span class="params">(ICH9LPCPMRegs *pm, uint32_t pm_io_base)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ICH9_DEBUG(<span class="string">"to 0x%x\n"</span>, pm_io_base);</span><br><span class="line"> </span><br><span class="line">    assert((pm_io_base &amp; ICH9_PMIO_MASK) == <span class="number">0</span>);</span><br><span class="line"> </span><br><span class="line">    pm-&gt;pm_io_base = pm_io_base;</span><br><span class="line">    memory_region_transaction_begin();</span><br><span class="line">    memory_region_set_enabled(&amp;pm-&gt;io, pm-&gt;pm_io_base != <span class="number">0</span>);</span><br><span class="line">    memory_region_set_address(&amp;pm-&gt;io, pm-&gt;pm_io_base);</span><br><span class="line">    memory_region_transaction_commit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="memory_listener">memory_listener</h3><p>地址空间里有个比较重要的数据结构是memory listner，这个数据结构里可以存放一些回调函数，顾名思义，回调函数被调用的时机就是地址空间发生变动的时候。譬如在memory_region_transaction_commit里可以看到对begin和commit的调用，而在address_space_update_topology_pass里可以看到对region_add，region_del，region_nop的调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> MemoryListener &#123;</span><br><span class="line">    <span class="keyword">void</span> (*begin)(MemoryListener *listener);</span><br><span class="line">    <span class="keyword">void</span> (*commit)(MemoryListener *listener);</span><br><span class="line">    <span class="keyword">void</span> (*region_add)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*region_del)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*region_nop)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*log_start)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*log_stop)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*log_sync)(MemoryListener *listener, MemoryRegionSection *section);</span><br><span class="line">    <span class="keyword">void</span> (*log_global_start)(MemoryListener *listener);</span><br><span class="line">    <span class="keyword">void</span> (*log_global_stop)(MemoryListener *listener);</span><br><span class="line">    <span class="keyword">void</span> (*eventfd_add)(MemoryListener *listener, MemoryRegionSection *section,</span><br><span class="line">                        <span class="keyword">bool</span> match_data, <span class="keyword">uint64_t</span> data, EventNotifier *e);</span><br><span class="line">    <span class="keyword">void</span> (*eventfd_del)(MemoryListener *listener, MemoryRegionSection *section,</span><br><span class="line">                        <span class="keyword">bool</span> match_data, <span class="keyword">uint64_t</span> data, EventNotifier *e);</span><br><span class="line">    <span class="keyword">void</span> (*coalesced_mmio_add)(MemoryListener *listener, MemoryRegionSection *section,</span><br><span class="line">                               hwaddr addr, hwaddr len);</span><br><span class="line">    <span class="keyword">void</span> (*coalesced_mmio_del)(MemoryListener *listener, MemoryRegionSection *section,</span><br><span class="line">                               hwaddr addr, hwaddr len);</span><br><span class="line">    <span class="comment">/* Lower = earlier (during add), later (during del) */</span></span><br><span class="line">    <span class="keyword">unsigned</span> priority;</span><br><span class="line">    AddressSpace *address_space_filter;</span><br><span class="line">    QTAILQ_ENTRY(MemoryListener) link;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>比较重要的memory_listner有kvm_memory_listener，kvm_io_listener，dispatch_listener。kvm相关的两个listner比较明显，用意就是在qemu的地址空间发生变动的时候通过回调函数通知到kvm。</p>
+<p>dispatch_listener的初始化在address_space_init_dispatch，它在每个地址空间里都存在，用意是在地址空间发生变动的时候，通过内部的数据结构记录这种变化，以此得知地址空间里每一段地址应该属于哪个memory region，这样当虚机有io操作需要在qemu里完成的时候，也就是vcpu线程从kvm返回需要处理io或者mmio的时候都需要通过对应的地址空间的dispatch_listner找到io操作的目标。具体可以看address_space_rw里的address_space_translate函数。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          QEMU MEMORY REGION 使用记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">LIBVIRT HOOK 脚本里执行后台程序</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2015 Chaohong Hu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
