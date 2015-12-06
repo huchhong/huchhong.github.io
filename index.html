@@ -105,7 +105,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 17.5px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 15px;">虚拟化</a>
+						<a href="/tags/C-C/" style="font-size: 20px;">C/C++</a> <a href="/tags/gcc/" style="font-size: 10px;">gcc</a> <a href="/tags/libvirt/" style="font-size: 10px;">libvirt</a> <a href="/tags/qemu/" style="font-size: 16.67px;">qemu</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/虚拟化/" style="font-size: 13.33px;">虚拟化</a>
 					</div>
 				</section>
 				
@@ -166,6 +166,82 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-SkipList" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/06/SkipList/" class="article-date">
+  	<time datetime="2015-12-06T03:22:39.000Z" itemprop="datePublished">2015-12-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/06/SkipList/">SkipList</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>leveldb里有个SkipList，学习了一下这种数据结构的原理和实现，稍微记录一下。</p>
+<h2 id="介绍">介绍</h2><p>SkipList和平衡树一样，目的都是为了快速的查找以及插入，删除。相对于平衡树来说，优点应该是插入和删除的时候涉及到很少的节点，相对来说，红黑树和B树每次插入，删除的时候为了平衡调整可能会涉及到大量的节点。这对并发编程意味着只需要对更少的节点进行加锁，即更高的并发率。所以像leveldb这样的尤其关注写性能的应用会选择SkipList。</p>
+<h2 id="原理">原理</h2><p>SkipList的实现相对来说很容易理解。它采用了多层链表的形式。一般的单向链表数据结构如下：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist%201.png" alt="linklist"></p>
+<p>下面是2层的skiplist演示：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist%202.png" alt="skiplist-l2"><br>从上图可以看出，最高一层间隔性地指向了更远的节点，此时查找key为4的节点是这样的：</p>
+<ol>
+<li>从节点1的最高层开始查找，找到3节点</li>
+<li>3节点的key小于4，接着从3节点的最高层开始找，找到5节点</li>
+<li>5节点的key大于4，因此返回从3节点的下一层开始找，找到节点4</li>
+</ol>
+<p>从两层扩展到多层是类似的。首先要确定最高层数，这个由应用确定，层数越高，查找的效率会越高，但是相应地，插入，删除涉及到的节点就会越多，因此需要取个折衷点。其次，每个节点是多少层呢，从leveldb的实现看，每层的层数是随机确定的，在[1,maxlevel]之间。</p>
+<p>下面演示一下，最高层为4层的skiplist的插入, 一开始是这样的：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist3.png" alt="skiplist3"><br>head节点不存实际的key</p>
+<p>插入key为1的节点，随机得到的层数为2：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist4.png" alt="skiplist4"></p>
+<p>插入key为5的节点，随机得到的层数为3：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist5.png" alt="skiplist5"></p>
+<p>插入key为4的节点，随机得到的层数为4：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist6.png" alt="skiplist6"></p>
+<p>插入key为3的节点，随机得到的层数为1：</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/skiplist7.png" alt="skiplist7"></p>
+<p>删除操作很容易从上面的插入操作推导出。总的来看SkipList算法其实要比红黑树和B树还要简单。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-LEVELDB-ATOMICPOINTER" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -673,64 +749,6 @@
       
         <p class="article-more-link">
           <a  href="/2015/08/25/LINUX-时钟函数/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-QEMU-里PTHREAD-KEY-T-的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" class="article-date">
-  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/">QEMU 里PTHREAD_KEY_T 的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>pthread_key_t的说明可以看 <a href="http://linux.die.net/man/3/pthread_key_create">http://linux.die.net/man/3/pthread_key_create</a>，相关的api只有pthread_key_create,pthread_setspecific,pthread_getspecific, pthread_key_delete。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
