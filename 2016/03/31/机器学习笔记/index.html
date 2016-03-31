@@ -16,7 +16,10 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_gradient.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/normal_equations.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/compare_gradient_normalequaiton.PNG">
-<meta property="og:updated_time" content="2016-03-31T13:21:22.221Z">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression_hypothesis.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/sogmoid.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression1.PNG">
+<meta property="og:updated_time" content="2016-03-31T13:49:50.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记">
 <meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
@@ -222,7 +225,8 @@
 <h3 id="Normal_Equations">Normal Equations</h3><p>解决线性回归问题的时候，还可以利用矩阵直接求解使代价函数最小化的参数值。见下面例子：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/normal_equations.PNG" alt="normal equation"></p>
 <p>梯度下降法和Normal Equations两种方法的比较见下图：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/compare_gradient_normalequaiton.PNG" alt="normal equation"><br>这里提到当训练集个数较小时更适合使用Normal Equations，较大时（超过10000）应该考虑使用梯度下降法。</p>
 <h2 id="第三周">第三周</h2><p>介绍逻辑回归，名字虽然带有回归，可实际上是解决的是分类问题。</p>
-<p>逻辑回归的思路是</p>
+<p>逻辑回归的思路是将特征空间一分为二(如果特征有两个，想象一条线将平面一分为二，如果特征有三个，想象一个平面将三维空间一分为二)，一边为正类，另一边为负类。逻辑回归解决的是二值分类问题，不过可以通过one-vs-all方法解决多分类（超过2类）的问题。</p>
+<h3 id="假设函数，代价函数，参数导数">假设函数，代价函数，参数导数</h3><p>逻辑回归的假设函数是：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression_hypothesis.PNG" alt="hypothesis"><br>其中g(z)为S型函数:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/sogmoid.PNG" alt="sigmoid"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression1.PNG" alt="slide1"><br>假设函数的值在[0,1]的范围。h(x)&gt;=0.5，目标分类 y=1, h(x)&lt;0.5, 目标分类y等于0。因此该假设函数可以理解为目标函数y等于1的概率，h(x)大于等于0.5意味着有较大概率为正分类。</p>
 
       
     </div>
