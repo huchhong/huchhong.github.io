@@ -32,7 +32,19 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic3.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic4.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic5.PNG">
-<meta property="og:updated_time" content="2016-04-01T04:09:31.973Z">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/one-vs-all.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/non-linear-classification.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/feedforward_propagation.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_costfunction.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/backpropagation.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gz.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gz2.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_gradient.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG">
+<meta property="og:updated_time" content="2016-04-01T10:35:16.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记">
 <meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
@@ -242,7 +254,7 @@
 <h3 id="假设函数，代价函数，梯度函数">假设函数，代价函数，梯度函数</h3><p>逻辑回归的假设函数是：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression_hypothesis.PNG" alt="hypothesis"><br>其中g(z)为S型函数:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/sogmoid.PNG" alt="sigmoid"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression1.PNG" alt="slide1"><br>假设函数的值在[0,1]的范围。h(x)&gt;=0.5，目标分类 y=1, h(x)&lt;0.5, 目标分类y等于0。因此该假设函数可以理解为目标函数y等于1的概率，h(x)大于等于0.5意味着有较大概率为正分类。</p>
 <p>代价函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_cost_function.PNG" alt="cost_function"><br>梯度函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_gradient.PNG" alt="gradient"><br>此处梯度函数的公式形式恰好和线性回归里梯度函数的公式一样，只是假设函数不一样，因此实际上是不一样的。</p>
 <h3 id="替代梯度下降的高级方法">替代梯度下降的高级方法</h3><p>这里一直用梯度下降来求解参数的最优解，这里介绍了另外的高级方法，比如Conjugate gradient，BFGS, L-BFGS。这些方法能够比梯度下降计算效率更高，更适用于大规模机器学习，比如特征很多的情况，而且也不需要手动指定学习速率。对这些方法，超出了这个课程的范畴，因此课程里提到了使用matlab/octave提供的函数黑盒来使用这些高级方法。不过这些方法同样需要用到代价函数和梯度函数来迭代求解最优解。</p>
-<h3 id="多项式">多项式</h3><p>和线性回归一样，逻辑回归也可以将多项式变量映射为线性方程中的变量。使用多项式的原因是线性分类不能很好地符合训练数据。下图中，线性分类可以很好的对训练数据进行分类：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic1.PNG" alt="pic1"><br>但是，下面的情况就无能为力：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic2.PNG" alt="pic2"><br>使用多项式类可以在特征空间中划定一个复杂形状的边界，从而正确地将正类和负类分开。</p>
+<h3 id="多项式回归-1">多项式回归</h3><p>和线性回归一样，逻辑回归也可以将多项式变量映射为线性方程中的变量。使用多项式的原因是线性分类不能很好地符合训练数据。下图中，线性分类可以很好的对训练数据进行分类：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic1.PNG" alt="pic1"><br>但是，下面的情况就无能为力：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic2.PNG" alt="pic2"><br>使用多项式类可以在特征空间中划定一个复杂形状的边界，从而正确地将正类和负类分开。</p>
 <p>使用多项式时需要进行特征映射，即指定多项式的最高幂次，然后将原来的输入映射为特征。比如原来有两个输入x1,x2,设定最高幂次为6，特征映射如下所示：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/mapfeature.PNG" alt=""><br>经过变换后，原来只是2个输入被映射为28维向量。由此也可以看出，当原先选择的特征数量较大时，使用多项式映射来获取较好的边界时，会导致最后的特征爆炸式增长，不利于计算，这在后面会有其他的机器学习方法解决。</p>
 <p>当输入数量不是很大时，使用多项式映射的逻辑回归还是能够很好得完成分类任务。</p>
 <h3 id="过拟合和欠拟合">过拟合和欠拟合</h3><p>先看线性回归中的情形，模型是使用房屋大小预测房价：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/overfit_underfit.PNG" alt="overfit_underfit"><br>再看逻辑回归中的情形：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/overfit_underfit2.PNG" alt="overfit_underfit"></p>
@@ -250,6 +262,18 @@
 <h3 id="正则化代价函数和梯度函数">正则化代价函数和梯度函数</h3><p>为了解决过拟合和欠拟合问题，在代价函数和梯度函数中加入对模型复杂度的惩罚，通过引入额外的参数来对拟合程度进行折中。这种方法允许引入非常多的特征，最终通过参数的调整，可以得到合适的特征权重（theta）。</p>
 <p>正则化后的代价函数：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_costfunction_regulated.PNG" alt="costfunction"><br>正则化后的梯度函数：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_gradient_regulated1.PNG" alt="gradient1"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_gradient_regulated2.PNG" alt="gradient2"><br>其中的lambda值越小，取得的参数越倾向于复杂的参数模型，造成过拟合，lambda越大，倾向于简单的模型，造成欠拟合。</p>
 <p><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic3.PNG" alt="1"><br>lambda=1,合适的拟合<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic4.PNG" alt="2"><br>lambda=0，过拟合<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic5.PNG" alt="3"><br>lambda=100，欠拟合</p>
+<h3 id="多类的分类问题">多类的分类问题</h3><p>逻辑回归的模型一开始是用来解决二值分类的，但是应用one-vs-all方法，也可以用来解决多类的分类问题。假设一共有K个分类，对于每个类别，都分别应用一次逻辑回归，将当前类视为正类1，其他类统归负类0，一共得到K个模型，在预测的时候，对每个模型分别求出假设函数值。由于逻辑回归里假设函数值的意义为输出为正类的概率值，因此K个输出里，哪个假设函数值最高，就可以归入哪一类。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/one-vs-all.PNG" alt="one-vs-all"></p>
+<h2 id="第四周">第四周</h2><p>这周介绍了神经网络。逻辑回归应用多项式特征虽然也可以表示非线性假设，但是当原始输入特征很多时，应用多项式假设容易造成特征空间急剧膨胀，这种情况逻辑回归不是很好的方法。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/non-linear-classification.PNG" alt="non-linear"></p>
+<p>神经网络可以很好得应付这种非线性假设。我对神经网络的理解是每一层网络单独的看都是逻辑回归，而且使用的是线性模型。后面一层接着对上一层使用线性模型如此叠加之后，最后的输出就是对输入的复杂非线性模型，而且模型对应的参数个数要远小于逻辑回归在非线性假设时的爆炸式增长。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network.PNG" alt="neural network"></p>
+<h3 id="前向传播和预测">前向传播和预测</h3><p>当给定模型参数theta时（参数的计算在第五周介绍），可以利用前向传播求出神经网络的输出层。由于神经网络的每一层都是逻辑回归，因此最终的输出值的意义仍然代表将输入对应的输出划分为该类的概率。因此对最终的分类，和逻辑回归一样，由假设函数的值决定分类结果。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/feedforward_propagation.PNG" alt="feedforward_propagation"></p>
+<h2 id="第五周">第五周</h2><p>这周介绍神经网络模型的推导方法。</p>
+<h3 id="代价函数和梯度函数">代价函数和梯度函数</h3><p>正则化后的代价函数如下：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_costfunction.PNG" alt="costfunction"><br>其中L表示层数，Sl表述第l层的节点个数。</p>
+<h4 id="后向传播算法">后向传播算法</h4><p>后向传播算法用来计算代价函数关于模型参数的梯度函数。梯度函数的推导过程很复杂，课程里只是介绍了计算方法，正所谓一招在手，天下我有，工程应用知道计算方法也很不错了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/backpropagation.PNG" alt="backpropagation"><br>其中需要计算g(z)的导数:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gz.PNG" alt="gz1"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gz2.PNG" alt="gz2"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_gradient.PNG" alt="gradient"></p>
+<p>得到了代价函数和梯度函数的算法后，就可以应用梯度下降法或者其他更高级的方法求解出使代价函数最小的模型参数了。</p>
+<h3 id="梯度检测">梯度检测</h3><p>鉴于神经网络的实现较为复杂，一个不小心脑子混乱实现出错，可能看到的还是经过多次迭代，代价函数逐渐减少，看着没有问题，但是得到的却是比正确实现时更差的预测精度，而你却浑然不觉。因此为了保证实现没有问题，课程在这个地方强烈推荐梯度检测。</p>
+<p>之前后向传播里介绍了梯度函数的计算方法，但是还存在一种计算效率不高，但是实现非常简单的方法，非常适合用来检测后向传播的梯度计算方法是否正确实现了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG" alt="gradient_estimate"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG" alt="gradient_estimate"></p>
+<p>检测的方法可以随意构建一个模型，指定神经网络的层数，每层的节点个数，输入，输出，模型参数值，然后分别使用这两种方法计算当前的梯度，查看结果是否相近。</p>
+<h3 id="参数的初始值">参数的初始值</h3><p>在线性回归和逻辑回归里，参数的初始化都可以指定为从0开始（当然从其他值开始也可以）。但在神经网络里，参数初始化不能设置为全0，而应当全部采用随机值进行初始化，否则将导致中间隐藏层的节点是相等的特征，失去神经网路的意义。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG" alt="random_init_param"></p>
 
       
     </div>
