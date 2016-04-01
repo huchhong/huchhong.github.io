@@ -44,7 +44,7 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG">
-<meta property="og:updated_time" content="2016-04-01T10:35:16.516Z">
+<meta property="og:updated_time" content="2016-04-01T10:51:13.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记">
 <meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
@@ -274,7 +274,18 @@
 <p>之前后向传播里介绍了梯度函数的计算方法，但是还存在一种计算效率不高，但是实现非常简单的方法，非常适合用来检测后向传播的梯度计算方法是否正确实现了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG" alt="gradient_estimate"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG" alt="gradient_estimate"></p>
 <p>检测的方法可以随意构建一个模型，指定神经网络的层数，每层的节点个数，输入，输出，模型参数值，然后分别使用这两种方法计算当前的梯度，查看结果是否相近。</p>
 <h3 id="参数的初始值">参数的初始值</h3><p>在线性回归和逻辑回归里，参数的初始化都可以指定为从0开始（当然从其他值开始也可以）。但在神经网络里，参数初始化不能设置为全0，而应当全部采用随机值进行初始化，否则将导致中间隐藏层的节点是相等的特征，失去神经网路的意义。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG" alt="random_init_param"></p>
-
+<h2 id="第六周">第六周</h2><p>这一周提供一些应用机器学习的建议，毕竟之前已经学到手线性回归，逻辑回归，神经网络，实际应用的时候对于如何选择合适的模型，以及模型参数的设置还是有不少疑问。</p>
+<h3 id="机器学习诊断">机器学习诊断</h3><p>假设当你使用正则化的线性回归对房价进行预测时，发现训练得出的模型用来预测房价的结果不是很理想，那么你下一步要做什么呢？以下是可选项：</p>
+<ul>
+<li>增加训练集个数</li>
+<li>尝试缩小特征集</li>
+<li>尝试增加特征</li>
+<li>尝试增加特征集个数</li>
+<li>尝试提高lambda值</li>
+<li>尝试降低lambda值</li>
+</ul>
+<p>盲目的尝试以上方法很可能花费了大量时间却得不出想要的结果，因此这时候需要对当前的机器学习先进行诊断，以便知道怎样才能更好的提高机器学习的性能。</p>
+<h4 id="评价过拟合和欠拟合">评价过拟合和欠拟合</h4>
       
     </div>
     
