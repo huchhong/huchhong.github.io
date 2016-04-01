@@ -3,18 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>QEMU 里的协程（COROUTINE） | Hong&#39;s blog</title>
+  <title>机器学习笔记（三） —— 神经网络 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+  <meta name="description" content="第四周这周介绍了神经网络。逻辑回归应用多项式特征虽然也可以表示非线性假设，但是当原始输入特征很多时，应用多项式假设容易造成特征空间急剧膨胀，这种情况逻辑回归不是很好的方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QEMU 里的协程（COROUTINE）">
-<meta property="og:url" content="http://huchhong.github.io/2015/08/24/QEMU-里的协程（COROUTINE）/index.html">
+<meta property="og:title" content="机器学习笔记（三） —— 神经网络">
+<meta property="og:url" content="http://huchhong.github.io/2016/04/01/机器学习笔记（三）—— 神经网络/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
-<meta property="og:updated_time" content="2015-12-04T14:30:33.480Z">
+<meta property="og:description" content="第四周这周介绍了神经网络。逻辑回归应用多项式特征虽然也可以表示非线性假设，但是当原始输入特征很多时，应用多项式假设容易造成特征空间急剧膨胀，这种情况逻辑回归不是很好的方法。">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/non-linear-classification.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/feedforward_propagation.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_costfunction.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/backpropagation.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gz.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gz2.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_gradient.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG">
+<meta property="og:updated_time" content="2016-04-01T11:00:50.797Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="QEMU 里的协程（COROUTINE）">
-<meta name="twitter:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+<meta name="twitter:title" content="机器学习笔记（三） —— 神经网络">
+<meta name="twitter:description" content="第四周这周介绍了神经网络。逻辑回归应用多项式特征虽然也可以表示非线性假设，但是当原始输入特征很多时，应用多项式假设容易造成特征空间急剧膨胀，这种情况逻辑回归不是很好的方法。">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -166,11 +177,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-QEMU-里的协程（COROUTINE）" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-机器学习笔记（三）—— 神经网络" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/08/24/QEMU-里的协程（COROUTINE）/" class="article-date">
-  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
+      <a href="/2016/04/01/机器学习笔记（三）—— 神经网络/" class="article-date">
+  	<time datetime="2016-04-01T10:56:23.000Z" itemprop="datePublished">2016-04-01</time>
 </a>
     </div>
   
@@ -183,7 +194,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      QEMU 里的协程（COROUTINE）
+      机器学习笔记（三） —— 神经网络
     </h1>
   
 
@@ -191,11 +202,11 @@
       
       <div class="article-info article-info-post">
         
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/机器学习/">机器学习</a>
 	</div>
 
-        
 
         <div class="clearfix"></div>
       </div>
@@ -203,14 +214,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，<a id="more"></a>比如python和ruby。协程可以理解为在用户层进行管理的伪线程，可以实现任务的切换，说它是伪线程是因为任务的切换都是在一个真正的线程内部完成的，协程存在于用户层，对操作系统来说，根本识别不出协程的存在，所以协程发挥不了smp的性能，它的优势也不是并发。</p>
-<p>协程的优势在我看来应该是编程上的方便，是面向程序员的，而不是面向计算机的，所有需要协程的地方都可以用其他方式实现，而且协程也不会带来性能上的提高。</p>
-<p>即使这样，协程还存在，证明了这种方法确实有效，有利于程序员的编程。python里的迭代器是经典的协程应用，像ruby和python这样的语言本身实现了协程，但是像C语言，要使用协程，还是需要费点功夫，linux下可以利用ucontext实现协程，qemu里默认就是利用了ucontext实现协程。</p>
-<p>谷歌一下“qemu 协程”可以找到几篇比较好的介绍qemu里协程实现的博文，我就不再重复了，给个链接：<a href="http://www.cnblogs.com/VincentXu/p/3350389.html" target="_blank" rel="external">http://www.cnblogs.com/VincentXu/p/3350389.html</a></p>
-<p>看到qemu里使用协程，很自然有一个疑问，就是qemu为什么使用协程，协程给qemu带来了什么好处？ 我搜了一下，果然在qemu的开发提交日志里有关于qemu引入协程的原因：<a href="http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html" target="_blank" rel="external">http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html</a></p>
-<p>日志里说的可能需要大家琢磨一下。日志里说qemu的开发里使用了很多异步处理，异步处理的代码大致方法就是发送请求，设置回调函数，然后返回处理其他事项，等请求处理完毕，在调用回调函数完成最后一步。但是异步处理带来的问题是复杂化了代码，原本在同步代码里顺序执行的一块代码被强行拆分成了一片片的代码，而且为了在回调函数里传递上下文，通常还需要包装一个结构体进行传递，所有的这一切就是增加了代码的复杂度，导致qemu的许多模块在开发的时候倾向于选择同步代码。所以这时候就需要引入协程。协程在这里最大的好处在于保持了代码的完整性，因为协程有自己独立的栈空间，因此可以在协程里维护一个完整的上下文环境，异步请求的代码在协程里就变成了这个样子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> coroutine_fn <span class="title">my_coroutine</span><span class="params">(<span class="keyword">void</span> *opaque)</span> </span>&#123;</span><br><span class="line">      MyData *my_data = opaque;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//发送异步请求</span></span><br><span class="line">      aio_request()</span><br><span class="line"> </span><br><span class="line">      qemu_coroutine_yield();</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//异步请求处理完毕，接着处理后续工作</span></span><br><span class="line">      do_more_work()</span><br><span class="line">       </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到上面的代码如同同步io的过程一样，非常舒服，唯一的区别是在发送完异步请求后有一个qemu_coroutine_yield()，这是主动退出当前协程，将代码控制权返回调用该协程的协程。当然为了重新返回该协程处理异步io的结果，还需要多做一些事情，比如设置异步io的回调函数，在回调函数里通知异步io完成，以便在适当的时机重新切回协程继续处理。虽然还是有回调函数，但是该回调函数已经被简化了，因为它不必携带上下文，只需要做一些通知事项。假设不用协程，而采用下半部的机制，然后利用回调函数做通知，可以想象这种方法依然不如协程在一个函数内部拥有完整上下文来的好。</p>
-<p>总结来说，qemu里引入协程主要是为了编程上的考虑，降低了异步io代码的复杂性，是协程的很好的应用案例。</p>
+        <h2 id="第四周">第四周</h2><p>这周介绍了神经网络。逻辑回归应用多项式特征虽然也可以表示非线性假设，但是当原始输入特征很多时，应用多项式假设容易造成特征空间急剧膨胀，这种情况逻辑回归不是很好的方法。<br><a id="more"></a><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/non-linear-classification.PNG" alt="non-linear"></p>
+<p>神经网络可以很好得应付这种非线性假设。我对神经网络的理解是每一层网络单独的看都是逻辑回归，而且使用的是线性模型。后面一层接着对上一层使用线性模型如此叠加之后，最后的输出就是对输入的复杂非线性模型，而且模型对应的参数个数要远小于逻辑回归在非线性假设时的爆炸式增长。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network.PNG" alt="neural network"></p>
+<h3 id="前向传播和预测">前向传播和预测</h3><p>当给定模型参数theta时（参数的计算在第五周介绍），可以利用前向传播求出神经网络的输出层。由于神经网络的每一层都是逻辑回归，因此最终的输出值的意义仍然代表将输入对应的输出划分为该类的概率。因此对最终的分类，和逻辑回归一样，由假设函数的值决定分类结果。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/feedforward_propagation.PNG" alt="feedforward_propagation"></p>
+<h2 id="第五周">第五周</h2><p>这周介绍神经网络模型的推导方法。</p>
+<h3 id="代价函数和梯度函数">代价函数和梯度函数</h3><p>正则化后的代价函数如下：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_costfunction.PNG" alt="costfunction"><br>其中L表示层数，Sl表述第l层的节点个数。</p>
+<h4 id="后向传播算法">后向传播算法</h4><p>后向传播算法用来计算代价函数关于模型参数的梯度函数。梯度函数的推导过程很复杂，课程里只是介绍了计算方法，正所谓一招在手，天下我有，工程应用知道计算方法也很不错了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/backpropagation.PNG" alt="backpropagation"><br>其中需要计算g(z)的导数:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gz.PNG" alt="gz1"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gz2.PNG" alt="gz2"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/neural_network_gradient.PNG" alt="gradient"></p>
+<p>得到了代价函数和梯度函数的算法后，就可以应用梯度下降法或者其他更高级的方法求解出使代价函数最小的模型参数了。</p>
+<h3 id="梯度检测">梯度检测</h3><p>鉴于神经网络的实现较为复杂，一个不小心脑子混乱实现出错，可能看到的还是经过多次迭代，代价函数逐渐减少，看着没有问题，但是得到的却是比正确实现时更差的预测精度，而你却浑然不觉。因此为了保证实现没有问题，课程在这个地方强烈推荐梯度检测。</p>
+<p>之前后向传播里介绍了梯度函数的计算方法，但是还存在一种计算效率不高，但是实现非常简单的方法，非常适合用来检测后向传播的梯度计算方法是否正确实现了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG" alt="gradient_estimate"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG" alt="gradient_estimate"></p>
+<p>检测的方法可以随意构建一个模型，指定神经网络的层数，每层的节点个数，输入，输出，模型参数值，然后分别使用这两种方法计算当前的梯度，查看结果是否相近。</p>
+<h3 id="参数的初始值">参数的初始值</h3><p>在线性回归和逻辑回归里，参数的初始化都可以指定为从0开始（当然从其他值开始也可以）。但在神经网络里，参数初始化不能设置为全0，而应当全部采用随机值进行初始化，否则将导致中间隐藏层的节点是相等的特征，失去神经网路的意义。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG" alt="random_init_param"></p>
 
       
     </div>
@@ -220,18 +234,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/04/01/机器学习笔记（四） —— 应用中的问题/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          GCC THREAD LOCAL STORAGE
+          机器学习笔记（四） —— 应用中的问题
         
       </div>
     </a>
   
   
-    <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">QEMU 里PTHREAD_KEY_T 的使用</div>
+    <a href="/2016/04/01/机器学习笔记（二） —— 逻辑回归/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">机器学习笔记（二） —— 逻辑回归</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

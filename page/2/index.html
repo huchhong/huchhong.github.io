@@ -167,6 +167,180 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-QEMU-里COROUTINE-POOL-的演进" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/" class="article-date">
+  	<time datetime="2015-08-25T16:00:00.000Z" itemprop="datePublished">2015-08-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/">QEMU 里COROUTINE POOL 的演进</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu的coroutine为了减少不断创建和销毁，建立了pool来存储coroutine。这部分代码可以在qemu-coroutine.c里看到。我注意到从2.2.1版本的qemu到2.3和2.4版本的qemu，这部分代码有了改进。贴出这部分代码作为程序改进的范例学习。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/26/QEMU-里COROUTINE-POOL-的演进/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-里的队列" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/26/QEMU-里的队列/" class="article-date">
+  	<time datetime="2015-08-25T16:00:00.000Z" itemprop="datePublished">2015-08-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/26/QEMU-里的队列/">QEMU 里的队列</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>qemu里的队列代码在 include/qemu/queue.h里，从注释看，它是从netbsd直接拷贝过来的，可见该代码足够优秀并且复用性很高，现将整个头文件贴过来，方便日后欣赏和复用。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/26/QEMU-里的队列/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-LINUX-时钟函数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/25/LINUX-时钟函数/" class="article-date">
+  	<time datetime="2015-08-24T16:00:00.000Z" itemprop="datePublished">2015-08-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/25/LINUX-时钟函数/">LINUX 时钟函数</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>linux有好几个函数可以用来获取当前时间，编程的时候经常需要计算两个事件之间的时间间隔，以前不怎么注意，一般习惯用gettimeofday这个函数。今天浏览qemu代码的时候，突然发现qemu里获取时间的函数使用的是clock_gettime，而且注释里明确提到了gettimeofday有隐患，不应该使用。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/25/LINUX-时钟函数/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-GCC-THREAD-LOCAL-STORAGE" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -225,64 +399,6 @@
 
 
   
-    <article id="post-QEMU-里PTHREAD-KEY-T-的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" class="article-date">
-  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/">QEMU 里PTHREAD_KEY_T 的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>pthread_key_t的说明可以看 <a href="http://linux.die.net/man/3/pthread_key_create">http://linux.die.net/man/3/pthread_key_create</a>，相关的api只有pthread_key_create,pthread_setspecific,pthread_getspecific, pthread_key_delete。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
     <article id="post-QEMU-里的协程（COROUTINE）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -325,6 +441,64 @@
       
         <p class="article-more-link">
           <a  href="/2015/08/24/QEMU-里的协程（COROUTINE）/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-QEMU-里PTHREAD-KEY-T-的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" class="article-date">
+  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/">QEMU 里PTHREAD_KEY_T 的使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>pthread_key_t的说明可以看 <a href="http://linux.die.net/man/3/pthread_key_create">http://linux.die.net/man/3/pthread_key_create</a>，相关的api只有pthread_key_create,pthread_setspecific,pthread_getspecific, pthread_key_delete。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -573,183 +747,9 @@
 
 
   
-    <article id="post-QEMU-MEMORY-REGION-使用记录" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/" class="article-date">
-  	<time datetime="2015-06-25T16:00:00.000Z" itemprop="datePublished">2015-06-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/">QEMU MEMORY REGION 使用记录</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="起因">起因</h2><p>之前对qemu和kvm里的内存管理做了一些研究，项目里也正好有一个场景需要对虚机的内存做一些手脚，然后写了一些代码，发现了一些问题，在这里小结一下。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/26/QEMU-MEMORY-REGION-使用记录/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-QEMU-对虚机的地址空间管理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/22/QEMU-对虚机的地址空间管理/" class="article-date">
-  	<time datetime="2015-06-21T16:00:00.000Z" itemprop="datePublished">2015-06-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/22/QEMU-对虚机的地址空间管理/">QEMU 对虚机的地址空间管理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言">前言</h2><p>cpu有两个地址空间：io 地址空间和内存地址空间。
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/22/QEMU-对虚机的地址空间管理/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-LIBVIRT-HOOK-脚本里执行后台程序" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/" class="article-date">
-  	<time datetime="2015-06-12T16:00:00.000Z" itemprop="datePublished">2015-06-13</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/">LIBVIRT HOOK 脚本里执行后台程序</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>libvirt 支持在虚机启动和关闭的时候执行hook脚本，具体可以看官方介绍<a href="https://www.libvirt.org/hooks.html">Hooks for specific system management</a>。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libvirt/">libvirt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/虚拟化/">虚拟化</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/06/13/LIBVIRT-HOOK-脚本里执行后台程序/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

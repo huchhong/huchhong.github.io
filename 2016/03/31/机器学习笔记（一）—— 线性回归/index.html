@@ -3,18 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>QEMU 里的协程（COROUTINE） | Hong&#39;s blog</title>
+  <title>机器学习笔记（一） —— 线性回归 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+  <meta name="description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QEMU 里的协程（COROUTINE）">
-<meta property="og:url" content="http://huchhong.github.io/2015/08/24/QEMU-里的协程（COROUTINE）/index.html">
+<meta property="og:title" content="机器学习笔记（一） —— 线性回归">
+<meta property="og:url" content="http://huchhong.github.io/2016/03/31/机器学习笔记（一）—— 线性回归/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
-<meta property="og:updated_time" content="2015-12-04T14:30:33.480Z">
+<meta property="og:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_costfunciton.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_hypothesis.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_gradient.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/normal_equations.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/compare_gradient_normalequaiton.PNG">
+<meta property="og:updated_time" content="2016-04-01T10:59:15.422Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="QEMU 里的协程（COROUTINE）">
-<meta name="twitter:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+<meta name="twitter:title" content="机器学习笔记（一） —— 线性回归">
+<meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -166,11 +171,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-QEMU-里的协程（COROUTINE）" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-机器学习笔记（一）—— 线性回归" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/08/24/QEMU-里的协程（COROUTINE）/" class="article-date">
-  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
+      <a href="/2016/03/31/机器学习笔记（一）—— 线性回归/" class="article-date">
+  	<time datetime="2016-03-31T10:41:28.000Z" itemprop="datePublished">2016-03-31</time>
 </a>
     </div>
   
@@ -183,7 +188,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      QEMU 里的协程（COROUTINE）
+      机器学习笔记（一） —— 线性回归
     </h1>
   
 
@@ -191,11 +196,11 @@
       
       <div class="article-info article-info-post">
         
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/机器学习/">机器学习</a>
 	</div>
 
-        
 
         <div class="clearfix"></div>
       </div>
@@ -203,14 +208,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，<a id="more"></a>比如python和ruby。协程可以理解为在用户层进行管理的伪线程，可以实现任务的切换，说它是伪线程是因为任务的切换都是在一个真正的线程内部完成的，协程存在于用户层，对操作系统来说，根本识别不出协程的存在，所以协程发挥不了smp的性能，它的优势也不是并发。</p>
-<p>协程的优势在我看来应该是编程上的方便，是面向程序员的，而不是面向计算机的，所有需要协程的地方都可以用其他方式实现，而且协程也不会带来性能上的提高。</p>
-<p>即使这样，协程还存在，证明了这种方法确实有效，有利于程序员的编程。python里的迭代器是经典的协程应用，像ruby和python这样的语言本身实现了协程，但是像C语言，要使用协程，还是需要费点功夫，linux下可以利用ucontext实现协程，qemu里默认就是利用了ucontext实现协程。</p>
-<p>谷歌一下“qemu 协程”可以找到几篇比较好的介绍qemu里协程实现的博文，我就不再重复了，给个链接：<a href="http://www.cnblogs.com/VincentXu/p/3350389.html" target="_blank" rel="external">http://www.cnblogs.com/VincentXu/p/3350389.html</a></p>
-<p>看到qemu里使用协程，很自然有一个疑问，就是qemu为什么使用协程，协程给qemu带来了什么好处？ 我搜了一下，果然在qemu的开发提交日志里有关于qemu引入协程的原因：<a href="http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html" target="_blank" rel="external">http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html</a></p>
-<p>日志里说的可能需要大家琢磨一下。日志里说qemu的开发里使用了很多异步处理，异步处理的代码大致方法就是发送请求，设置回调函数，然后返回处理其他事项，等请求处理完毕，在调用回调函数完成最后一步。但是异步处理带来的问题是复杂化了代码，原本在同步代码里顺序执行的一块代码被强行拆分成了一片片的代码，而且为了在回调函数里传递上下文，通常还需要包装一个结构体进行传递，所有的这一切就是增加了代码的复杂度，导致qemu的许多模块在开发的时候倾向于选择同步代码。所以这时候就需要引入协程。协程在这里最大的好处在于保持了代码的完整性，因为协程有自己独立的栈空间，因此可以在协程里维护一个完整的上下文环境，异步请求的代码在协程里就变成了这个样子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> coroutine_fn <span class="title">my_coroutine</span><span class="params">(<span class="keyword">void</span> *opaque)</span> </span>&#123;</span><br><span class="line">      MyData *my_data = opaque;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//发送异步请求</span></span><br><span class="line">      aio_request()</span><br><span class="line"> </span><br><span class="line">      qemu_coroutine_yield();</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//异步请求处理完毕，接着处理后续工作</span></span><br><span class="line">      do_more_work()</span><br><span class="line">       </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到上面的代码如同同步io的过程一样，非常舒服，唯一的区别是在发送完异步请求后有一个qemu_coroutine_yield()，这是主动退出当前协程，将代码控制权返回调用该协程的协程。当然为了重新返回该协程处理异步io的结果，还需要多做一些事情，比如设置异步io的回调函数，在回调函数里通知异步io完成，以便在适当的时机重新切回协程继续处理。虽然还是有回调函数，但是该回调函数已经被简化了，因为它不必携带上下文，只需要做一些通知事项。假设不用协程，而采用下半部的机制，然后利用回调函数做通知，可以想象这种方法依然不如协程在一个函数内部拥有完整上下文来的好。</p>
-<p>总结来说，qemu里引入协程主要是为了编程上的考虑，降低了异步io代码的复杂性，是协程的很好的应用案例。</p>
+        <p>最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。</p>
+<a id="more"></a>
+<p>这篇笔记纯粹是为了记录学习到的各种算法的公式和使用，不涉及原理说明，算是为了巩固记忆的课程笔记吧。笔记里用到的图片和公式都是从课程视频以及练习中的指导pdf截取。</p>
+<h2 id="第一周">第一周</h2><p>机器学习入门介绍，有一些重要的概念：</p>
+<ul>
+<li>监督学习<br>  回归问题和分类问题</li>
+<li>未监督学习</li>
+<li>代价函数<br>  衡量输出预测值和实际值之间的误差</li>
+<li>梯度下降<br>  用于求代价函数关于模型参数的偏导数</li>
+</ul>
+<h2 id="第二周">第二周</h2><p>介绍多个变量的线性回归，开始有编程练习了。</p>
+<h3 id="代价函数和梯度下降">代价函数和梯度下降</h3><p>线性回归使用的代价函数：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_costfunciton.PNG" alt="costfunction"><br>其中假设函数公式为:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_hypothesis.PNG" alt="hypothesis"><br>参数的梯度下降更新公式为:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/linear_regression_gradient.PNG" alt="gradient"><br>其中alpha为学习速率，alpha后的公式即为代价函数关于theta(j)的偏导。alpha值太低，收敛速度慢，而alpha太大，有可能导致不能收敛。对梯度下降来说，合适的学习速率需要逐一尝试，比如按0.3，0.1，0.03，0.01这样尝试。最好可以画出迭代次数和代价函数的关系图，以此判断收敛情况。</p>
+<h3 id="特征的标准化">特征的标准化</h3><p>有时会发现有的特征值很大，比如在几百上千的数量级，有的特征值很小，在0.1的特征值。对线性回归来说，这会影响收敛速度，以此有这种情况，最好先将特征进行标准化，即将所有的特征都限定在相同的范围。</p>
+<p>标准化也有不同的方式，一种方式是 xi = (xi - mean(x))/std(x)，其中mean(x)是x序列的均值，std(x)是标准差。另一种方式是xi = (xi - mean(x))/(max(x) - min(x))</p>
+<h3 id="多项式回归">多项式回归</h3><p>线性回归也可以用于多项式回归，只需要将多项式项映射为线性回归项即可。比如使用房屋大小预测房屋价格时，发现可能假设函数更符合二次多项式，即h(size) = theta0 + theta1*size + theta2*size^2。这时可以将size映射为x1，size^2映射为x2就可以利用线性回归算法：h(x) = theta0 + theta1*x1 + theta2*x2。</p>
+<h3 id="Normal_Equations">Normal Equations</h3><p>解决线性回归问题的时候，还可以利用矩阵直接求解使代价函数最小化的参数值。见下面例子：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/normal_equations.PNG" alt="normal equation"></p>
+<p>梯度下降法和Normal Equations两种方法的比较见下图：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/compare_gradient_normalequaiton.PNG" alt="normal equation"><br>这里提到当训练集个数较小时更适合使用Normal Equations，较大时（超过10000）应该考虑使用梯度下降法。</p>
 
       
     </div>
@@ -220,18 +234,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/25/GCC-THREAD-LOCAL-STORAGE/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/04/01/机器学习笔记（二） —— 逻辑回归/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          GCC THREAD LOCAL STORAGE
+          机器学习笔记（二） —— 逻辑回归
         
       </div>
     </a>
   
   
-    <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">QEMU 里PTHREAD_KEY_T 的使用</div>
+    <a href="/2015/12/06/SkipList/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SkipList</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
