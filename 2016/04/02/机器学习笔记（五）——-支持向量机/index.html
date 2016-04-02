@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/svm1.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/svm_gaussian.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/svm2.PNG">
-<meta property="og:updated_time" content="2016-04-02T05:27:19.873Z">
+<meta property="og:updated_time" content="2016-04-02T05:34:35.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记（五）—— 支持向量机">
 <meta name="twitter:description" content="传送门：https://www.coursera.org/learn/machine-learning
@@ -216,6 +216,7 @@
 <h2 id="第七周">第七周</h2><p>介绍支持向量机，和逻辑回归，神经网络相比，支持向量机在学习复杂的非线性方程时更清晰，更强大。</p>
 <a id="more"></a>
 <h3 id="代价函数">代价函数</h3><p>对逻辑回归的代价函数进行改造：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/support_vector_machine.PNG" alt="costfunction"><br>代价函数中C是正则化参数，可以理解为逻辑回归里正则化参数lambda的倒数，因此C值偏小，容易导致欠拟合，C值偏大，容易导致过拟合。 </p>
+<p>此处没有对cost0和cost1函数具体展开，因为支持向量机一般使用实现好的库函数，因此这里需要提供的参数是C。</p>
 <h3 id="支持向量机的直观理解">支持向量机的直观理解</h3><p><img src="http://7xowlb.com1.z0.glb.clouddn.com/svm.PNG" alt="svm"></p>
 <h3 id="核函数">核函数</h3><p>SVM如果没有核函数的配合，只能划出线性边界，当使用核函数后，SVM可以划出非常复杂的非线性边界。</p>
 <p>核函数是在特征空间中选取一些点，然后根据要判断的特征和这些点的相似性来作为新的特征。这里的相似性函数就是核函数。实现时选取的点就是训练集里的原始特征，因此实际上对未知特征的预测是根据和训练集中已知特征的相似性来进行判断。</p>
