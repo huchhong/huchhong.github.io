@@ -5,13 +5,15 @@
   
   <title>机器学习笔记（二） —— 逻辑回归 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="传送门：https://www.coursera.org/learn/machine-learning
+  <meta name="description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
 第三周介绍逻辑回归，名字虽然带有回归，可实际上是解决的是分类问题。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习笔记（二） —— 逻辑回归">
 <meta property="og:url" content="http://huchhong.github.io/2016/04/01/机器学习笔记（二） —— 逻辑回归/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description" content="传送门：https://www.coursera.org/learn/machine-learning
+<meta property="og:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
 第三周介绍逻辑回归，名字虽然带有回归，可实际上是解决的是分类问题。">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression_hypothesis.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/sogmoid.PNG">
@@ -30,10 +32,11 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic4.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic5.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/one-vs-all.PNG">
-<meta property="og:updated_time" content="2016-04-01T13:01:43.754Z">
+<meta property="og:updated_time" content="2016-04-03T01:34:22.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记（二） —— 逻辑回归">
-<meta name="twitter:description" content="传送门：https://www.coursera.org/learn/machine-learning
+<meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
 第三周介绍逻辑回归，名字虽然带有回归，可实际上是解决的是分类问题。">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
@@ -223,7 +226,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>传送门：<a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="external">https://www.coursera.org/learn/machine-learning</a></p>
+        <p>最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。</p>
+<p>传送门：<a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="external">https://www.coursera.org/learn/machine-learning</a></p>
 <h2 id="第三周">第三周</h2><p>介绍逻辑回归，名字虽然带有回归，可实际上是解决的是分类问题。</p>
 <a id="more"></a>
 <p>逻辑回归的思路是将特征空间一分为二(如果特征有两个，想象一条线将平面一分为二，如果特征有三个，想象一个平面将三维空间一分为二)，一边为正类，另一边为负类。逻辑回归解决的是二值分类问题，不过可以通过one-vs-all方法解决多分类（超过2类）的问题。</p>
