@@ -194,31 +194,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。</p>
-<p>传送门：<a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="external">https://www.coursera.org/learn/machine-learning</a></p>
+<p>传送门：<a href="https://www.coursera.org/learn/machine-learning">https://www.coursera.org/learn/machine-learning</a></p>
 <h2 id="第八周">第八周</h2><p>这周介绍的是非监督学习，包括K均值算法和PCA算法。</p>
-<h3 id="K均值算法">K均值算法</h3><p>K均值算法用于聚类，计算过程比较简单。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/K-means.PNG" alt="k-means"></p>
-<p>聚类的优化目标函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/K-means_objective.PNG" alt="objective"></p>
-<p>需要注意以下几点：</p>
-<ol>
-<li>根据初始化值的不同，K均值算法会有局部最优值，因此当对结果不确定时，可以多次进行随机初始化，然后选取优化目标函数值最低的结果。</li>
-<li>初始化中心点的选取最好随机从输入值X中选取。</li>
-<li>对K值的选取，更多的是根据实际应用需要确定，而不是从机器学习的角度判断。</li>
-</ol>
-<h3 id="降低维度">降低维度</h3><p>一般基于两个动机，会有将特征空间维数降低的需求：</p>
-<ul>
-<li>应用机器学习的时候，会遇到特征维数很大，这会造计算的时候消耗太多的内存空间，存储空间，而且计算速度慢。</li>
-<li>可视化特征空间，一般要求特征空间只有2维或者3维。</li>
-</ul>
-<p>PCA（Principal Component Analysis）算法是一种可以用于降维的方法。</p>
-<p>PCA算法大概的思路是从原先的N维空间中寻找一个K维子空间，然后将原N维空间中的向量投射到这个K维子空间上。只要原先的N为向量到K维子空间的投射垂直距离足够小，就意味着K维空间依然能够保持N维空间的大部分信息。</p>
-<p>这里只记录课程里提到的计算方法，其中涉及的数学原理这门课程也没提到。</p>
-<p>首先在进行PCA之前，需要将原来的特征正则化，也就是让每一个特征具有相近的取值范围：x = (x - mean(x))/std(x)。</p>
-<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/pca.PNG" alt="pca"><br>其中Simga是协方差矩阵，svd是matlab/octave的奇异值分解函数。从以上方法计算出来的z就是压缩后k维的向量，而Ureduce则是转换矩阵。</p>
-<h4 id="从K维特征重新回到N维空间">从K维特征重新回到N维空间</h4><p>在得到压缩后的向量z后，还可以通过Ureduce重新转换为N维向量，当然该N维向量只是近似于原先的向量，损失的程度取决于K维子空间保存的N维空间的信息。</p>
-<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/pca_reconstruction.PNG" alt="reconstruction"></p>
-<h4 id="K值的选取">K值的选取</h4><p>我们想要将特征降维，那么将N降到多少才是合适的呢？首先需要衡量降到K维空间后损失了多少信息，可以用以下方法衡量：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/distortion.PNG" alt="distortion"><br>还有更简单的方法，利用之前协方差矩阵的奇异值分解计算求得的特征值：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/distortion2.PNG" alt="distortion"><br>最终的挑选方法如下：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/pick.PNG" alt="pick_k"></p>
-<h4 id="PCA方法的应用">PCA方法的应用</h4><p>PCA方法应该说是很有用的，它可以应用于监督学习，将高维的特征降到低维，提高了机器学习的效率。但是根据课程里的建议，不应该一开始设计机器学习方案的时候就将PCA方法考虑进去，而应当在没有PCA的情况下进行学习，如果效果不理想，比如收敛速度太慢，或者占用内存太多，才需要加上PCA算法。</p>
-
       
     </div>
     
@@ -231,6 +208,10 @@
 	</div>
 
 
+      
+        <p class="article-more-link">
+          <a  href="/2016/04/03/机器学习笔记（六）-——-非监督学习/#more">more >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
