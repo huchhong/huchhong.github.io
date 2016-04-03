@@ -3,18 +3,46 @@
 <head>
   <meta charset="utf-8">
   
-  <title>QEMU 里的协程（COROUTINE） | Hong&#39;s blog</title>
+  <title>机器学习笔记（六） —— 非监督学习 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+  <meta name="description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
+第八周这周介绍的是非监督学习，包括K均值算法和PCA算法。
+K均值算法K均值算法用于聚类，计算过程比较简单。
+聚类的优化目标函数为：
+需要注意以下几点：
+
+根据初始化值的不同">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QEMU 里的协程（COROUTINE）">
-<meta property="og:url" content="http://huchhong.github.io/2015/08/24/QEMU-里的协程（COROUTINE）/index.html">
+<meta property="og:title" content="机器学习笔记（六） —— 非监督学习">
+<meta property="og:url" content="http://huchhong.github.io/2016/04/03/机器学习笔记（六）-——-非监督学习/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
-<meta property="og:updated_time" content="2015-12-04T14:30:33.480Z">
+<meta property="og:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
+第八周这周介绍的是非监督学习，包括K均值算法和PCA算法。
+K均值算法K均值算法用于聚类，计算过程比较简单。
+聚类的优化目标函数为：
+需要注意以下几点：
+
+根据初始化值的不同">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/K-means.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/K-means_objective.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/pca.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/pca_reconstruction.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/distortion.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/distortion2.PNG">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/pick.PNG">
+<meta property="og:updated_time" content="2016-04-03T09:57:51.459Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="QEMU 里的协程（COROUTINE）">
-<meta name="twitter:description" content="coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，">
+<meta name="twitter:title" content="机器学习笔记（六） —— 非监督学习">
+<meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
+传送门：https://www.coursera.org/learn/machine-learning
+第八周这周介绍的是非监督学习，包括K均值算法和PCA算法。
+K均值算法K均值算法用于聚类，计算过程比较简单。
+聚类的优化目标函数为：
+需要注意以下几点：
+
+根据初始化值的不同">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -166,11 +194,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-QEMU-里的协程（COROUTINE）" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-机器学习笔记（六）-——-非监督学习" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/08/24/QEMU-里的协程（COROUTINE）/" class="article-date">
-  	<time datetime="2015-08-23T16:00:00.000Z" itemprop="datePublished">2015-08-24</time>
+      <a href="/2016/04/03/机器学习笔记（六）-——-非监督学习/" class="article-date">
+  	<time datetime="2016-04-03T09:01:21.000Z" itemprop="datePublished">2016-04-03</time>
 </a>
     </div>
   
@@ -183,7 +211,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      QEMU 里的协程（COROUTINE）
+      机器学习笔记（六） —— 非监督学习
     </h1>
   
 
@@ -191,11 +219,11 @@
       
       <div class="article-info article-info-post">
         
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/机器学习/">机器学习</a>
 	</div>
 
-        
 
         <div class="clearfix"></div>
       </div>
@@ -203,14 +231,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>coroutine是协程的意思，一般的应用软件比较少见到，但是很多动态语言里内置了协程的功能，<a id="more"></a>比如python和ruby。协程可以理解为在用户层进行管理的伪线程，可以实现任务的切换，说它是伪线程是因为任务的切换都是在一个真正的线程内部完成的，协程存在于用户层，对操作系统来说，根本识别不出协程的存在，所以协程发挥不了smp的性能，它的优势也不是并发。</p>
-<p>协程的优势在我看来应该是编程上的方便，是面向程序员的，而不是面向计算机的，所有需要协程的地方都可以用其他方式实现，而且协程也不会带来性能上的提高。</p>
-<p>即使这样，协程还存在，证明了这种方法确实有效，有利于程序员的编程。python里的迭代器是经典的协程应用，像ruby和python这样的语言本身实现了协程，但是像C语言，要使用协程，还是需要费点功夫，linux下可以利用ucontext实现协程，qemu里默认就是利用了ucontext实现协程。</p>
-<p>谷歌一下“qemu 协程”可以找到几篇比较好的介绍qemu里协程实现的博文，我就不再重复了，给个链接：<a href="http://www.cnblogs.com/VincentXu/p/3350389.html" target="_blank" rel="external">http://www.cnblogs.com/VincentXu/p/3350389.html</a></p>
-<p>看到qemu里使用协程，很自然有一个疑问，就是qemu为什么使用协程，协程给qemu带来了什么好处？ 我搜了一下，果然在qemu的开发提交日志里有关于qemu引入协程的原因：<a href="http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html" target="_blank" rel="external">http://qemu.11.n7.nabble.com/PATCH-v3-0-4-Coroutines-for-better-asynchronous-programming-td9809.html</a></p>
-<p>日志里说的可能需要大家琢磨一下。日志里说qemu的开发里使用了很多异步处理，异步处理的代码大致方法就是发送请求，设置回调函数，然后返回处理其他事项，等请求处理完毕，在调用回调函数完成最后一步。但是异步处理带来的问题是复杂化了代码，原本在同步代码里顺序执行的一块代码被强行拆分成了一片片的代码，而且为了在回调函数里传递上下文，通常还需要包装一个结构体进行传递，所有的这一切就是增加了代码的复杂度，导致qemu的许多模块在开发的时候倾向于选择同步代码。所以这时候就需要引入协程。协程在这里最大的好处在于保持了代码的完整性，因为协程有自己独立的栈空间，因此可以在协程里维护一个完整的上下文环境，异步请求的代码在协程里就变成了这个样子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> coroutine_fn <span class="title">my_coroutine</span><span class="params">(<span class="keyword">void</span> *opaque)</span> </span>&#123;</span><br><span class="line">      MyData *my_data = opaque;</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//发送异步请求</span></span><br><span class="line">      aio_request()</span><br><span class="line"> </span><br><span class="line">      qemu_coroutine_yield();</span><br><span class="line"> </span><br><span class="line">      <span class="comment">//异步请求处理完毕，接着处理后续工作</span></span><br><span class="line">      do_more_work()</span><br><span class="line">       </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到上面的代码如同同步io的过程一样，非常舒服，唯一的区别是在发送完异步请求后有一个qemu_coroutine_yield()，这是主动退出当前协程，将代码控制权返回调用该协程的协程。当然为了重新返回该协程处理异步io的结果，还需要多做一些事情，比如设置异步io的回调函数，在回调函数里通知异步io完成，以便在适当的时机重新切回协程继续处理。虽然还是有回调函数，但是该回调函数已经被简化了，因为它不必携带上下文，只需要做一些通知事项。假设不用协程，而采用下半部的机制，然后利用回调函数做通知，可以想象这种方法依然不如协程在一个函数内部拥有完整上下文来的好。</p>
-<p>总结来说，qemu里引入协程主要是为了编程上的考虑，降低了异步io代码的复杂性，是协程的很好的应用案例。</p>
+        <p>最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。</p>
+<p>传送门：<a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="external">https://www.coursera.org/learn/machine-learning</a></p>
+<h2 id="第八周">第八周</h2><p>这周介绍的是非监督学习，包括K均值算法和PCA算法。</p>
+<h3 id="K均值算法">K均值算法</h3><p>K均值算法用于聚类，计算过程比较简单。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/K-means.PNG" alt="k-means"></p>
+<p>聚类的优化目标函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/K-means_objective.PNG" alt="objective"></p>
+<p>需要注意以下几点：</p>
+<ol>
+<li>根据初始化值的不同，K均值算法会有局部最优值，因此当对结果不确定时，可以多次进行随机初始化，然后选取优化目标函数值最低的结果。</li>
+<li>初始化中心点的选取最好随机从输入值X中选取。</li>
+<li>对K值的选取，更多的是根据实际应用需要确定，而不是从机器学习的角度判断。</li>
+</ol>
+<h3 id="降低维度">降低维度</h3><p>一般基于两个动机，会有将特征空间维数降低的需求：</p>
+<ul>
+<li>应用机器学习的时候，会遇到特征维数很大，这会造计算的时候消耗太多的内存空间，存储空间，而且计算速度慢。</li>
+<li>可视化特征空间，一般要求特征空间只有2维或者3维。</li>
+</ul>
+<p>PCA（Principal Component Analysis）算法是一种可以用于降维的方法。</p>
+<p>PCA算法大概的思路是从原先的N维空间中寻找一个K维子空间，然后将原N维空间中的向量投射到这个K维子空间上。只要原先的N为向量到K维子空间的投射垂直距离足够小，就意味着K维空间依然能够保持N维空间的大部分信息。</p>
+<p>这里只记录课程里提到的计算方法，其中涉及的数学原理这门课程也没提到。</p>
+<p>首先在进行PCA之前，需要将原来的特征正则化，也就是让每一个特征具有相近的取值范围：x = (x - mean(x))/std(x)。</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/pca.PNG" alt="pca"><br>其中Simga是协方差矩阵，svd是matlab/octave的奇异值分解函数。从以上方法计算出来的z就是压缩后k维的向量，而Ureduce则是转换矩阵。</p>
+<h4 id="从K维特征重新回到N维空间">从K维特征重新回到N维空间</h4><p>在得到压缩后的向量z后，还可以通过Ureduce重新转换为N维向量，当然该N维向量只是近似于原先的向量，损失的程度取决于K维子空间保存的N维空间的信息。</p>
+<p><img src="http://7xowlb.com1.z0.glb.clouddn.com/pca_reconstruction.PNG" alt="reconstruction"></p>
+<h4 id="K值的选取">K值的选取</h4><p>我们想要将特征降维，那么将N降到多少才是合适的呢？首先需要衡量降到K维空间后损失了多少信息，可以用以下方法衡量：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/distortion.PNG" alt="distortion"><br>还有更简单的方法，利用之前协方差矩阵的奇异值分解计算求得的特征值：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/distortion2.PNG" alt="distortion"><br>最终的挑选方法如下：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/pick.PNG" alt="pick_k"></p>
+<h4 id="PCA方法的应用">PCA方法的应用</h4><p>PCA方法应该说是很有用的，它可以应用于监督学习，将高维的特征降到低维，提高了机器学习的效率。但是根据课程里的建议，不应该一开始设计机器学习方案的时候就将PCA方法考虑进去，而应当在没有PCA的情况下进行学习，如果效果不理想，比如收敛速度太慢，或者占用内存太多，才需要加上PCA算法。</p>
 
       
     </div>
@@ -220,18 +265,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/24/QEMU-里PTHREAD-KEY-T-的使用/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          QEMU 里PTHREAD_KEY_T 的使用
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/08/21/QEMU-处理结束信号/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">QEMU 处理结束信号</div>
+    <a href="/2016/04/02/机器学习笔记（五）——-支持向量机/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">机器学习笔记（五）—— 支持向量机</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

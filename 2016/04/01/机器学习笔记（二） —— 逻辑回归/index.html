@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic4.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic5.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/one-vs-all.PNG">
-<meta property="og:updated_time" content="2016-04-03T01:34:22.607Z">
+<meta property="og:updated_time" content="2016-04-03T02:47:15.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记（二） —— 逻辑回归">
 <meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
@@ -232,7 +232,8 @@
 <a id="more"></a>
 <p>逻辑回归的思路是将特征空间一分为二(如果特征有两个，想象一条线将平面一分为二，如果特征有三个，想象一个平面将三维空间一分为二)，一边为正类，另一边为负类。逻辑回归解决的是二值分类问题，不过可以通过one-vs-all方法解决多分类（超过2类）的问题。</p>
 <h3 id="假设函数，代价函数，梯度函数">假设函数，代价函数，梯度函数</h3><p>逻辑回归的假设函数是：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression_hypothesis.PNG" alt="hypothesis"><br>其中g(z)为S型函数:<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/sogmoid.PNG" alt="sigmoid"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_regression1.PNG" alt="slide1"><br>假设函数的值在[0,1]的范围。h(x)&gt;=0.5，目标分类 y=1, h(x)&lt;0.5, 目标分类y等于0。因此该假设函数可以理解为目标函数y等于1的概率，h(x)大于等于0.5意味着有较大概率为正分类。</p>
-<p>代价函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_cost_function.PNG" alt="cost_function"><br>梯度函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_gradient.PNG" alt="gradient"><br>此处梯度函数的公式形式恰好和线性回归里梯度函数的公式一样，只是假设函数不一样，因此实际上是不一样的。</p>
+<p>代价函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_cost_function.PNG" alt="cost_function"></p>
+<p><font color="red">注意此处的代价函数设计为这个样子，是为了让代价函数成为一个凸函数，也即是保证有全局最优解。<br></font><br>梯度函数为：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic_gradient.PNG" alt="gradient"><br>此处梯度函数的公式形式恰好和线性回归里梯度函数的公式一样，只是假设函数不一样，因此实际上是不一样的。</p>
 <h3 id="替代梯度下降的高级方法">替代梯度下降的高级方法</h3><p>这里一直用梯度下降来求解参数的最优解，这里介绍了另外的高级方法，比如Conjugate gradient，BFGS, L-BFGS。这些方法能够比梯度下降计算效率更高，更适用于大规模机器学习，比如特征很多的情况，而且也不需要手动指定学习速率。对这些方法，超出了这个课程的范畴，因此课程里提到了使用matlab/octave提供的函数黑盒来使用这些高级方法。不过这些方法同样需要用到代价函数和梯度函数来迭代求解最优解。</p>
 <h3 id="多项式回归">多项式回归</h3><p>和线性回归一样，逻辑回归也可以将多项式变量映射为线性方程中的变量。使用多项式的原因是线性分类不能很好地符合训练数据。下图中，线性分类可以很好的对训练数据进行分类：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic1.PNG" alt="pic1"><br>但是，下面的情况就无能为力：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic2.PNG" alt="pic2"><br>使用多项式类可以在特征空间中划定一个复杂形状的边界，从而正确地将正类和负类分开。</p>
 <p>使用多项式时需要进行特征映射，即指定多项式的最高幂次，然后将原来的输入映射为特征。比如原来有两个输入x1,x2,设定最高幂次为6，特征映射如下所示：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/mapfeature.PNG" alt=""><br>经过变换后，原来只是2个输入被映射为28维向量。由此也可以看出，当原先选择的特征数量较大时，使用多项式映射来获取较好的边界时，会导致最后的特征爆炸式增长，不利于计算，这在后面会有其他的机器学习方法解决。</p>

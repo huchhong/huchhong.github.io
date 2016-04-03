@@ -26,7 +26,7 @@
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG">
 <meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG">
-<meta property="og:updated_time" content="2016-04-03T01:34:39.122Z">
+<meta property="og:updated_time" content="2016-04-03T02:49:16.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记（三） —— 神经网络">
 <meta name="twitter:description" content="最近在跟Coursera上斯坦福大学的机器学习课程，跟了几周课程了，强烈推荐这门课程，非常适合机器学习门外汉的入门学习。
@@ -233,7 +233,7 @@
 <p>之前后向传播里介绍了梯度函数的计算方法，但是还存在一种计算效率不高，但是实现非常简单的方法，非常适合用来检测后向传播的梯度计算方法是否正确实现了。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate.PNG" alt="gradient_estimate"><br><img src="http://7xowlb.com1.z0.glb.clouddn.com/gradient_estimate2.PNG" alt="gradient_estimate"></p>
 <p>检测的方法可以随意构建一个模型，指定神经网络的层数，每层的节点个数，输入，输出，模型参数值，然后分别使用这两种方法计算当前的梯度，查看结果是否相近。</p>
 <h3 id="参数的初始值">参数的初始值</h3><p>在线性回归和逻辑回归里，参数的初始化都可以指定为从0开始（当然从其他值开始也可以）。但在神经网络里，参数初始化不能设置为全0，而应当全部采用随机值进行初始化，否则将导致中间隐藏层的节点是相等的特征，失去神经网路的意义。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/random_init_param.PNG" alt="random_init_param"></p>
-
+<font color="red">最后，注意神经网络不保证求得全局最优解。</font>
       
     </div>
     
