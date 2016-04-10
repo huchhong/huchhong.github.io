@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>QEMU 处理结束信号 | Hong&#39;s blog</title>
+  <title>对决策树回归/分类的理解 | Hong&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="qemu 里模拟了很多设备，有一些设备申请了一些特殊资源，这些资源并不是在进程结束后就能自动释放的。因此qemu必须对SIGINT这类的信号做出处理，以便做出一些清理工作。">
+  <meta name="description" content="早先接触机器学习的时候，最先学到的是朴素贝叶斯分类器和决策树分类器。之后在学完斯坦福大学的机器学习课程后，今天重新复习决策树分类器，对这种算法有了进一步的认识。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="QEMU 处理结束信号">
-<meta property="og:url" content="http://huchhong.github.io/2015/08/21/QEMU-处理结束信号/index.html">
+<meta property="og:title" content="对决策树回归/分类的理解">
+<meta property="og:url" content="http://huchhong.github.io/2016/04/10/对决策树回归-分类的理解/index.html">
 <meta property="og:site_name" content="Hong's blog">
-<meta property="og:description" content="qemu 里模拟了很多设备，有一些设备申请了一些特殊资源，这些资源并不是在进程结束后就能自动释放的。因此qemu必须对SIGINT这类的信号做出处理，以便做出一些清理工作。">
-<meta property="og:updated_time" content="2015-12-04T14:35:39.207Z">
+<meta property="og:description" content="早先接触机器学习的时候，最先学到的是朴素贝叶斯分类器和决策树分类器。之后在学完斯坦福大学的机器学习课程后，今天重新复习决策树分类器，对这种算法有了进一步的认识。">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/2016-04-10%20110249.jpg">
+<meta property="og:image" content="http://7xowlb.com1.z0.glb.clouddn.com/logistic2.PNG">
+<meta property="og:updated_time" content="2016-04-10T03:18:01.007Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="QEMU 处理结束信号">
-<meta name="twitter:description" content="qemu 里模拟了很多设备，有一些设备申请了一些特殊资源，这些资源并不是在进程结束后就能自动释放的。因此qemu必须对SIGINT这类的信号做出处理，以便做出一些清理工作。">
+<meta name="twitter:title" content="对决策树回归/分类的理解">
+<meta name="twitter:description" content="早先接触机器学习的时候，最先学到的是朴素贝叶斯分类器和决策树分类器。之后在学完斯坦福大学的机器学习课程后，今天重新复习决策树分类器，对这种算法有了进一步的认识。">
   
     <link rel="alternative" href="/atom.xml" title="Hong&#39;s blog" type="application/atom+xml">
   
@@ -166,11 +168,11 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-QEMU-处理结束信号" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-对决策树回归-分类的理解" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2015/08/21/QEMU-处理结束信号/" class="article-date">
-  	<time datetime="2015-08-20T16:00:00.000Z" itemprop="datePublished">2015-08-21</time>
+      <a href="/2016/04/10/对决策树回归-分类的理解/" class="article-date">
+  	<time datetime="2016-04-10T02:52:27.000Z" itemprop="datePublished">2016-04-10</time>
 </a>
     </div>
   
@@ -183,7 +185,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      QEMU 处理结束信号
+      对决策树回归/分类的理解
     </h1>
   
 
@@ -192,7 +194,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-C/">C/C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qemu/">qemu</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
 	</div>
 
         
@@ -203,11 +205,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>qemu 里模拟了很多设备，有一些设备申请了一些特殊资源，这些资源并不是在进程结束后就能自动释放的。因此qemu必须对SIGINT这类的信号做出处理，以便做出一些清理工作。</p>
+        <p>早先接触机器学习的时候，最先学到的是朴素贝叶斯分类器和决策树分类器。之后在学完斯坦福大学的机器学习课程后，今天重新复习决策树分类器，对这种算法有了进一步的认识。</p>
 <a id="more"></a>
-<p>在vl.c里调用了os_setup_signal_handling函数设置了信号处理函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qemu_system_shutdown_request</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;  </span><br><span class="line">    trace_qemu_system_shutdown_request();</span><br><span class="line">    shutdown_requested = <span class="number">1</span>;</span><br><span class="line">    qemu_notify_event();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">qemu_system_killed</span><span class="params">(<span class="keyword">int</span> signal, pid_t pid)</span></span><br><span class="line"></span>&#123;      </span><br><span class="line">    shutdown_signal = signal;</span><br><span class="line">    shutdown_pid = pid;</span><br><span class="line">    no_shutdown = <span class="number">0</span>;</span><br><span class="line">    qemu_system_shutdown_request();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">termsig_handler</span><span class="params">(<span class="keyword">int</span> signal, siginfo_t *info, <span class="keyword">void</span> *c)</span></span><br><span class="line"></span>&#123;      </span><br><span class="line">    qemu_system_killed(info-&gt;si_signo, info-&gt;si_pid);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">os_setup_signal_handling</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;  </span><br><span class="line">    <span class="keyword">struct</span> sigaction act;</span><br><span class="line">         </span><br><span class="line">    <span class="built_in">memset</span>(&amp;act, <span class="number">0</span>, <span class="keyword">sizeof</span>(act));</span><br><span class="line">    act.sa_sigaction = termsig_handler;</span><br><span class="line">    act.sa_flags = SA_SIGINFO;</span><br><span class="line">    sigaction(SIGINT,  &amp;act, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGHUP,  &amp;act, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGTERM, &amp;act, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样在main_loop_should_exit里就能检测到退出条件。</p>
-<p>同时注意到设备清理工作一般是通过设备模块里注册atexit函数实现的，由于能够保证进程是正常结束的，因此atexit注册的函数都能够被执行到，所以能够保证清理工作的进行。</p>
+<p>决策树算法实际上既可以解决分类问题，也可以解决回归问题。决策树算法比较简单，网上能够找到很多不错的分析。今天我看的是《统计学习方法》里对决策树的分析。</p>
+<p>对决策树的理解可以从对特征空间的划分来看，决策树只能对特征空间进行方方正正的划分。<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/2016-04-10%20110249.jpg" alt="特征空间划分"></p>
+<p>而在复杂的实际模型中，特征空间对应的分类可能是这样的：<br><img src="http://7xowlb.com1.z0.glb.clouddn.com/logistic2.PNG" alt="特征空间划分"><br>这时候需要分类算法能够进行复杂的非线性划分，而决策树是办不到的。</p>
+<p>因此来看，决策树算法只适合简单的分类问题。</p>
 
       
     </div>
@@ -217,18 +220,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/24/QEMU-里的协程（COROUTINE）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          QEMU 里的协程（COROUTINE）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/08/20/QEMU-里错误处理的方法/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">QEMU 里错误处理的方法</div>
+    <a href="/2016/04/03/机器学习笔记（六）-——-非监督学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">机器学习笔记（六） —— 非监督学习</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
